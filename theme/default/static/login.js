@@ -2,12 +2,8 @@
 
 // 登录函数
 async function login() {
-    const secret = document.getElementById('secret').value;
-    if (!secret) {
-        document.getElementById('error-message').style.display = 'block';
-        document.getElementById('error-message').textContent = '请输入密钥';
-        return;
-    }
+    var secret = document.getElementById('secret').value;
+    // Allow empty secret for local development
 
     // 检查是否支持现代API登录方式
     const useModernAuth = document.body.hasAttribute('data-use-modern-auth');

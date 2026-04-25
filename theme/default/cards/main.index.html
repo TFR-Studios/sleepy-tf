@@ -26,6 +26,14 @@
 <p id="additional-info">{{ status.desc | safe }}</p>
 <p id="device-status"></p>
 <p id="last-updated">最后更新: {{ last_updated }}</p>
+<button onclick="takeScreenshot()" style="margin-top: 10px; padding: 8px 16px; cursor: pointer; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 20px; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+    📸 查看最新截图
+</button>
+<div id="screenshot-display" style="margin-top: 15px; text-align: center; display: none;">
+    <h4 style="margin: 10px 0;">📷 设备截图</h4>
+    <img id="screenshot-img" src="" alt="设备截图" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" />
+    <p id="screenshot-time" style="font-size: 12px; color: #aaa; margin-top: 5px;"></p>
+</div>
 <script>
     document.getElementById('status').classList.add("{{ status.color }}");
 </script>

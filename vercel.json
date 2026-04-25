@@ -1,5 +1,4 @@
 {
-    "$schema": "https://ghsrc.wyf9.top/get/vercel-schema.json",
     "version": 2,
     "builds": [
         {

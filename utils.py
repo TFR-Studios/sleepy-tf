@@ -95,6 +95,11 @@ def require_secret(redirect_to: str | None = None):
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(*args, **kwargs):
+            # 0. if secret is empty, skip verification
+            if not flask.g.secret:
+                l.debug('[Auth] Secret is empty, skipping verification')
+                return view_func(*args, **kwargs)
+
             # 1. body
             body: dict = flask.request.get_json(silent=True) or {}
             if body and body.get('secret') == flask.g.secret:
@@ -125,10 +130,12 @@ def require_secret(redirect_to: str | None = None):
             # -1. no any secret
             else:
                 if redirect_to:
-                    l.debug(f'[Auth] Verify secret failed, redirect to {redirect_to}')
+                    l.info(f'[Auth] Verify secret failed, redirect to {redirect_to}')
                     return flask.redirect(redirect_to, 302)
                 else:
-                    l.debug('[Auth] Verify secret Failed')
+                    l.info(f'[Auth] Verify secret Failed')
+                    l.info(f'[Auth] Body secret: {repr(body.get("secret"))}')
+                    l.info(f'[Auth] flask.g.secret: {repr(flask.g.secret)}')
                     raise APIUnsuccessful(401, 'Wrong Secret')
         return wrapper
     return decorator

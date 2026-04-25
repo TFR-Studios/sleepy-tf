@@ -795,6 +795,60 @@ def device_clear():
     }
 
 
+@app.route('/api/device/screenshot', methods=['POST'])
+@cross_origin(c.main.cors_origins)
+@u.require_secret()
+def device_screenshot():
+    '''
+    接收客户端上传的截图
+    - Method: **POST** (multipart/form-data)
+    '''
+    device_id = flask.request.form.get('device_id')
+    if not device_id:
+        raise u.APIUnsuccessful(400, 'Missing device_id')
+
+    if 'screenshot' not in flask.request.files:
+        raise u.APIUnsuccessful(400, 'Missing screenshot file')
+
+    file = flask.request.files['screenshot']
+    if file.filename == '':
+        raise u.APIUnsuccessful(400, 'Empty filename')
+
+    # 保存截图到 data/screenshots/ 目录
+    import os
+    screenshot_dir = u.get_path('data/screenshots')
+    os.makedirs(screenshot_dir, exist_ok=True)
+
+    # 使用时间戳命名
+    import time
+    filename = f'{device_id}_{int(time.time())}.png'
+    filepath = os.path.join(screenshot_dir, filename)
+    file.save(filepath)
+
+    # 更新设备截图路径
+    d.device_set(device_id, '', '', '', fields={'screenshot': filename})
+
+    return {
+        'success': True,
+        'screenshot': filename
+    }
+
+
+@app.route('/api/device/screenshot/<filename>')
+@cross_origin(c.main.cors_origins)
+def get_screenshot(filename):
+    '''
+    获取截图文件
+    - Method: **GET**
+    '''
+    import os
+    screenshot_path = u.get_path(f'data/screenshots/{filename}')
+    if not os.path.exists(screenshot_path):
+        raise u.APIUnsuccessful(404, 'Screenshot not found')
+
+    return flask.send_file(screenshot_path, mimetype='image/png')
+
+
 @app.route('/api/device/private')
 @u.require_secret()
 @cross_origin(c.main.cors_origins)
@@ -968,6 +1022,7 @@ p.trigger_event(pl.AppStartedEvent())
 
 if __name__ == '__main__':
     l.info(f'Hi {c.page.name}!')
+    l.info(f'[DEBUG] Loaded secret: {repr(c.main.secret)}')
     listening = f'{f"[{c.main.host}]" if ":" in c.main.host else c.main.host}:{c.main.port}'
     if c.main.https:
         ssl_context = (c.main.ssl_cert, c.main.ssl_key)
