@@ -1022,7 +1022,9 @@ p.trigger_event(pl.AppStartedEvent())
 
 if __name__ == '__main__':
     l.info(f'Hi {c.page.name}!')
-    l.info(f'[DEBUG] Loaded secret: {repr(c.main.secret)}')
+    l.info(f'[DEBUG] page.title = {c.page.title}')
+    l.info(f'[DEBUG] page.desc = {c.page.desc}')
+    l.info(f'[DEBUG] page.name = {c.page.name}')
     listening = f'{f"[{c.main.host}]" if ":" in c.main.host else c.main.host}:{c.main.port}'
     if c.main.https:
         ssl_context = (c.main.ssl_cert, c.main.ssl_key)
