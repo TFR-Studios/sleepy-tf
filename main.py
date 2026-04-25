@@ -129,15 +129,13 @@ try:
 
 except KeyboardInterrupt:
     l.info('Interrupt init, quitting')
-    exit(0)
+    raise SystemExit(0)
 except u.SleepyException as e:
     l.critical(e)
-    exit(2)
-except:
+    raise
+except Exception as init_err:
     l.critical(f'Unexpected Error!\n{format_exc()}')
-    exit(3)
-
-p.trigger_event(pl.AppInitializedEvent())
+    raise
 
 # endregion init
 
@@ -1021,7 +1019,10 @@ def serve_public(path_name: str):
 # region run
 
 
-p.trigger_event(pl.AppStartedEvent())
+try:
+    p.trigger_event(pl.AppStartedEvent())
+except NameError:
+    pass
 
 if __name__ == '__main__':
     l.info(f'Hi {c.page.name}!')

@@ -371,17 +371,22 @@ def get_path(path: str, create_dirs: bool = True, is_dir: bool = False) -> str:
     :param is_dir: 目标是否为目录
     :return: 绝对路径
     '''
-    if path == '/data/data.json' and current_dir().startswith('/var/task'):
-        # 适配 Vercel 部署 (调整 data/data.json 路径为可写的 /tmp/)
-        full_path = '/tmp/sleepy/data/data.json'
+    is_vercel = current_dir().startswith('/var/task')
+    needs_write = path.startswith('data/') or path.startswith('/data/')
+    
+    if is_vercel and needs_write:
+        # 适配 Vercel 部署 (文件系统只读，需要写入的都在 /tmp/)
+        if path.startswith('/data/'):
+            path = path[1:]
+        full_path = f'/tmp/sleepy/{path}'
     else:
         full_path = str(Path(__file__).parent.joinpath(path))
-        if create_dirs:
-            # 自动创建目录
-            if is_dir:
-                os.makedirs(full_path, exist_ok=True)
-            else:
-                os.makedirs(os.path.dirname(full_path), exist_ok=True)
+    if create_dirs:
+        # 自动创建目录
+        if is_dir:
+            os.makedirs(full_path, exist_ok=True)
+        else:
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
     return full_path
 
 
