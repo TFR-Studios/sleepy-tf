@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 # coding: utf-8
 
+# WSGI application object - must be at module level for Vercel
+app = None
+
 # ========== Init ==========
 
 # region init
