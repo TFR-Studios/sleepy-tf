@@ -92,6 +92,9 @@ ${last_updated}
 }
 
 // 截图功能 - 触发截图并显示
+// 客户端地址配置，Vercel 部署后需要修改为公网地址
+const SCREENSHOT_CLIENT_URL = window.SCREENSHOT_CLIENT_URL || 'http://127.0.0.1:9011';
+
 window.takeScreenshot = function() {
     const screenshotDisplay = document.getElementById('screenshot-display');
     const screenshotImg = document.getElementById('screenshot-img');
@@ -106,7 +109,7 @@ window.takeScreenshot = function() {
     }
     
     // 调用客户端截图接口（客户端会截图并返回图片）
-    fetch('http://127.0.0.1:9011/command/screenshot', {
+    fetch(SCREENSHOT_CLIENT_URL + '/command/screenshot', {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -121,7 +124,7 @@ window.takeScreenshot = function() {
     .then(data => {
         if (data.success) {
             // 截图成功，从客户端获取截图图片
-            return fetch('http://127.0.0.1:9011/command/screenshot/latest?t=' + Date.now());
+            return fetch(SCREENSHOT_CLIENT_URL + '/command/screenshot/latest?t=' + Date.now());
         } else {
             throw new Error('截图失败');
         }
