@@ -31,7 +31,7 @@
 1. Clone 本仓库 *(也可先 Fork)*
 
 ```shell
-git clone --depth 1 -b main https://github.com/sleepy-project/sleepy.git
+git clone --depth 1 -b main https://github.com/TFR-Studios/sleepy-tf.git
 ```
 
 2. 安装依赖
