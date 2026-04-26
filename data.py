@@ -44,13 +44,13 @@ class Data:
         # Check if Blob token is available
         if os.environ.get('BLOB_READ_WRITE_TOKEN'):
             try:
-                # Test Blob connection
-                vercel_blob.head('test.json')
+                # Test Blob connection - list operation doesn't throw 404 for empty stores
+                vercel_blob.list()
                 self._use_blob = True
                 l.info('[data] 使用 Vercel Blob 存储')
-            except Exception:
+            except Exception as e:
                 # Blob connection failed, fallback to memory
-                l.warning('[data] Vercel Blob 连接失败，使用内存存储')
+                l.warning(f'[data] Vercel Blob 连接失败 ({e})，使用内存存储')
                 self._memory_store = {
                     'main': {
                         'status': 0,
