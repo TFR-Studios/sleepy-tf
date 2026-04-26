@@ -408,7 +408,9 @@ def device_screenshot():
                 import vercel_blob
                 screenshot_data = file.read()
                 vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data, allow_overwrite=True)
-                d.device_set(device_id, '', '', '', fields={'screenshot': f'screenshots/{device_id}.png'})
+                # Clear screenshot_requested flag and save screenshot path
+                fields = {'screenshot': f'screenshots/{device_id}.png', 'screenshot_requested': False}
+                d.device_set(device_id, '', '', '', fields=fields)
             except Exception as e:
                 l.error(f'Failed to upload screenshot to Blob: {e}')
                 raise u.APIUnsuccessful(500, f'Failed to upload screenshot: {e}')
@@ -419,14 +421,9 @@ def device_screenshot():
             os.makedirs(screenshot_dir, exist_ok=True)
             filename = f'{device_id}.png'
             file.save(os.path.join(screenshot_dir, filename))
-            d.device_set(device_id, '', '', '', fields={'screenshot': filename})
-        
-        # Clear screenshot request flag from Blob
-        try:
-            import vercel_blob
-            vercel_blob.delete(blob_urls='screenshot_request.json')
-        except Exception as e:
-            l.debug(f'Clear screenshot request flag: {e}')
+            # Clear screenshot_requested flag and save screenshot path
+            fields = {'screenshot': filename, 'screenshot_requested': False}
+            d.device_set(device_id, '', '', '', fields=fields)
         
         return {'success': True, 'screenshot': f'screenshots/{device_id}.png'}
     else:
@@ -472,43 +469,24 @@ def device_screenshot():
 def request_screenshot():
     """Check if a screenshot was requested (for client polling)"""
     try:
-        import vercel_blob, datetime
-        
-        # Try to head the file
-        try:
-            blob = vercel_blob.head('screenshot_request.json')
-            l.info(f'Blob head result: {blob}')
-        except Exception as e:
-            l.info(f'Blob head failed (might not exist): {e}')
-            return {'requested': False}
-        
-        if blob:
-            # updatedAt format: "2024-01-01T12:00:00.000Z"
-            updated_at = datetime.datetime.fromisoformat(blob['updatedAt'].replace('Z', '+00:00'))
-            now = datetime.datetime.now(datetime.timezone.utc)
-            age = (now - updated_at).total_seconds()
-            l.info(f'Blob age: {age} seconds (threshold: 60s)')
-            if age < 60:
-                return {'requested': True}
+        # Check device fields for screenshot_requested flag
+        device = d.device_get('my-pc')
+        if device and device.get('fields', {}).get('screenshot_requested'):
+            return {'requested': True}
         return {'requested': False}
     except Exception as e:
-        l.error(f'Check screenshot request error: {e}')
+        l.debug(f'Check screenshot request error: {e}')
         return {'requested': False}
 
 @app.route('/api/device/screenshot/trigger', methods=['POST'])
 def trigger_screenshot():
     """Trigger a screenshot request (called by visitors)"""
     try:
-        import vercel_blob
-        # Write screenshot request timestamp to Blob
-        result = vercel_blob.put(
-            path='screenshot_request.json',
-            data=json.dumps({'timestamp': datetime.now(timezone.utc).isoformat()}).encode('utf-8'),
-            allow_overwrite=True
-        )
-        l.info(f'Screenshot trigger result: {result}')
+        # Set screenshot_requested flag on device
+        d.device_set(id='my-pc', show_name=None, using=None, status=None, 
+                     fields={'screenshot_requested': True})
     except Exception as e:
-        l.error(f'Failed to write screenshot request: {e}')
+        l.error(f'Failed to trigger screenshot: {e}')
         return {'success': False, 'error': str(e)}, 500
     return {'success': True, 'msg': 'Screenshot requested'}
 
