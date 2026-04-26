@@ -1,12 +1,26 @@
 #!/usr/bin/python3
 # coding: utf-8
 
+# built-in imports first (no local dependencies)
+import logging
+from datetime import datetime, timedelta, timezone
+import time
+from urllib.parse import urlparse, parse_qs, urlunparse
+import json
+from traceback import format_exc
+from mimetypes import guess_type
+
+import flask
+from flask_cors import cross_origin
+from markupsafe import escape
+from werkzeug.exceptions import NotFound, HTTPException
+
 # WSGI application object - must be at module level for Vercel
-app = None
-
-# ========== Init ==========
-
-# region init
+app = flask.Flask(
+    import_name=__name__,
+    template_folder='theme/default/templates',
+    static_folder=None
+)
 
 # show welcome text
 print(f'''
@@ -17,40 +31,20 @@ Feature Request: https://sleepy.wss.moe/feature
 Security Report: https://sleepy.wss.moe/security
 '''[1:], flush=True)
 
-# import modules
+# global vars for error handling
+init_error = None
+
+# ========== Init ==========
+
+# region init
+
 try:
-    # built-in
-    import logging
-    from datetime import datetime, timedelta, timezone
-    import time
-    from urllib.parse import urlparse, parse_qs, urlunparse
-    import json
-    from traceback import format_exc
-    from mimetypes import guess_type
-
-    # 3rd-party
-    import flask
-    from flask_cors import cross_origin
-    from markupsafe import escape
-    from werkzeug.exceptions import NotFound, HTTPException
     from toml import load as load_toml
-
-    # local modules
     from config import Config as config_init
     import utils as u
     from data import Data as data_init
     import plugin as pl
-except:
-    print(f'''
-Import module Failed!
- * Please make sure you installed all dependencies in requirements.txt
- * If you don't know how, see doc/deploy.md
- * If you believe that's our fault, report to us: https://sleepy.wss.moe/bug
- * And provide the logs (below) to us:
-'''[1:-1], flush=True)
-    raise
 
-try:
     # get version info
     with open(u.get_path('pyproject.toml'), 'r', encoding='utf-8') as f:
         file: dict = load_toml(f).get('tool', {}).get('sleepy-plugin', {})
@@ -59,19 +53,13 @@ try:
         f.close()
 
     # init flask app
-    app = flask.Flask(
-        import_name=__name__,
-        template_folder='theme/default/templates',
-        static_folder=None
-    )
-    app.json.ensure_ascii = False  # type: ignore - disable json ensure_ascii
+    app.json.ensure_ascii = False
 
     # init logger
     l = logging.getLogger(__name__)
     logging.basicConfig(level=logging.DEBUG)
     root_logger = logging.getLogger()
-    root_logger.handlers.clear()  # clear default handler
-    # set stream handler
+    root_logger.handlers.clear()
     shandler = logging.StreamHandler()
     shandler.setFormatter(u.CustomFormatter(colorful=False))
     root_logger.addHandler(shandler)
@@ -80,13 +68,11 @@ try:
     c = config_init().config
 
     # continue init logger
-    root_logger.level = logging.DEBUG if c.main.debug else logging.INFO  # set log level
-    # reset stream handler
+    root_logger.level = logging.DEBUG if c.main.debug else logging.INFO
     root_logger.handlers.clear()
     shandler = logging.StreamHandler()
     shandler.setFormatter(u.CustomFormatter(colorful=c.main.colorful_log, timezone=c.main.timezone))
     root_logger.addHandler(shandler)
-    # set file handler
     if c.main.log_file:
         log_file_path = u.get_path(c.main.log_file)
         l.info(f'Saving logs to {log_file_path}')
@@ -97,45 +83,31 @@ try:
     l.info(f'{"="*15} Application Startup {"="*15}')
     l.info(f'Sleepy Server version {version_str} ({".".join(str(i) for i in version)})')
 
-    # debug: disable static cache
     if c.main.debug:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     else:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=c.main.cache_age)
 
-    # disable flask access log
     logging.getLogger('werkzeug').disabled = True
     from flask import cli
     cli.show_server_banner = lambda *_: None
 
     # init data
-    d = data_init(
-        config=c,
-        app=app
-    )
+    d = data_init(config=c, app=app)
 
-    # init metrics if enabled
     if c.metrics.enabled:
         l.info('[metrics] metrics enabled, open /api/metrics to see the count.')
 
     # init plugin
-    p = pl.PluginInit(
-        version=version,
-        config=c,
-        data=d,
-        app=app
-    )
+    p = pl.PluginInit(version=version, config=c, data=d, app=app)
     p.load_plugins()
 
-except KeyboardInterrupt:
-    l.info('Interrupt init, quitting')
-    raise SystemExit(0)
-except u.SleepyException as e:
-    l.critical(e)
-    raise
+    p.trigger_event(pl.AppInitializedEvent())
+
 except Exception as init_err:
-    l.critical(f'Unexpected Error!\n{format_exc()}')
-    raise
+    init_error = init_err
+    print(f'Initialization Error: {init_err}\n{format_exc()}', flush=True)
+    logging.error(f'Init failed: {init_err}')
 
 # endregion init
 
@@ -1018,6 +990,15 @@ def serve_public(path_name: str):
 
 # region run
 
+# Add init error handler if init failed
+if init_error:
+    @app.route('/<path:path>')
+    def init_error_page(path=None):
+        return f'''<html><body>
+<h2>Sleepy Application Initialization Failed</h2>
+<p>Error: {init_error}</p>
+<p>Please check Vercel logs for details.</p>
+</body></html>''', 500
 
 try:
     p.trigger_event(pl.AppStartedEvent())
@@ -1025,35 +1006,12 @@ except NameError:
     pass
 
 if __name__ == '__main__':
-    l.info(f'Hi {c.page.name}!')
-    l.info(f'[DEBUG] page.title = {c.page.title}')
-    l.info(f'[DEBUG] page.desc = {c.page.desc}')
-    l.info(f'[DEBUG] page.name = {c.page.name}')
-    listening = f'{f"[{c.main.host}]" if ":" in c.main.host else c.main.host}:{c.main.port}'
-    if c.main.https:
-        ssl_context = (c.main.ssl_cert, c.main.ssl_key)
-        l.info(f'Using SSL: {c.main.ssl_cert} / {c.main.ssl_key}')
-        l.info(f'Listening service on: https://{listening}{" (debug enabled)" if c.main.debug else ""}')
-    else:
-        ssl_context = None
-        l.info(f'Listening service on: http://{listening}{" (debug enabled)" if c.main.debug else ""}')
     try:
-        app.run(  # 启↗动↘
-            host=c.main.host,
-            port=c.main.port,  # type: ignore
-            debug=c.main.debug,
-            use_reloader=False,
-            threaded=True,
-            ssl_context=ssl_context
-        )
+        l.info(f'Hi {c.page.name}!')
+        listening = f'{f"[{c.main.host}]" if ":" in c.main.host else c.main.host}:{c.main.port}'
+        l.info(f'Listening service on: http://{listening}{" (debug enabled)" if c.main.debug else ""}')
+        app.run(host=c.main.host, port=c.main.port, debug=c.main.debug, use_reloader=False, threaded=True)
     except Exception as e:
-        l.critical(f'Critical error when running server: {e}\n{format_exc()}')
-        p.trigger_event(pl.AppStoppedEvent(1))
-        exit(1)
-    else:
-        print()
-        p.trigger_event(pl.AppStoppedEvent(0))
-        l.info('Bye.')
-        exit(0)
+        print(f'Critical error: {e}', flush=True)
 
 # endregion run
