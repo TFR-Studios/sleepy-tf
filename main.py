@@ -473,16 +473,20 @@ def request_screenshot():
     """Check if a screenshot was requested (for client polling)"""
     try:
         import vercel_blob
-        result = vercel_blob.head('screenshot_request.json')
-        if result and 'updatedAt' in result:
+        # Use list to find screenshot request files
+        result = vercel_blob.list(prefix='screenshot_request')
+        blobs = result.get('blobs', []) if result else []
+        if blobs:
+            # Get the most recent one
+            latest = max(blobs, key=lambda x: x.get('updatedAt', ''))
             import datetime
-            # 检查请求是否在 60 秒内发出
-            updated_at = datetime.datetime.fromisoformat(result['updatedAt'].replace('Z', '+00:00'))
+            updated_at = datetime.datetime.fromisoformat(latest['updatedAt'].replace('Z', '+00:00'))
             now = datetime.datetime.now(datetime.timezone.utc)
             if (now - updated_at).total_seconds() < 60:
                 return {'requested': True}
         return {'requested': False}
-    except Exception:
+    except Exception as e:
+        l.debug(f'Check screenshot request error: {e}')
         return {'requested': False}
 
 @app.route('/api/device/screenshot/trigger', methods=['POST'])
