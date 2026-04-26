@@ -205,7 +205,10 @@ def before_request():
         body = flask.request.get_json(silent=True)
         if body and body.get('secret') == c.main.secret:
             secret_ok = True
-    if path.startswith('/api/device/') or path.startswith('/api/status/set') or path.startswith('/panel/auth') or path.startswith('/panel/verify'):
+    if path == '/api/device/screenshot' or path == '/api/device/screenshot/take' or path.startswith('/api/device/screenshot/') or path.startswith('/api/status/query') or path.startswith('/api/status/list') or path.startswith('/api/status/events'):
+        # Public read-only routes (screenshot is proxied to local client)
+        pass
+    elif path.startswith('/api/device/') or path.startswith('/api/status/set') or path.startswith('/panel/auth') or path.startswith('/panel/verify'):
         if not secret_ok:
             raise u.APIUnsuccessful(401, 'Wrong Secret')
     elif path.startswith('/panel/') and path != '/panel/login':
@@ -393,23 +396,27 @@ def device_clear():
     d.device_clear()
     return {'success': True}
 
-@app.route('/api/device/screenshot', methods=['POST'])
-def device_screenshot():
-    device_id = flask.request.form.get('device_id')
-    if not device_id:
-        raise u.APIUnsuccessful(400, 'Missing device_id')
-    if 'screenshot' not in flask.request.files:
-        raise u.APIUnsuccessful(400, 'Missing screenshot file')
-    file = flask.request.files['screenshot']
-    if file.filename == '':
-        raise u.APIUnsuccessful(400, 'Empty filename')
-    import os
-    screenshot_dir = u.get_path('data/screenshots')
-    os.makedirs(screenshot_dir, exist_ok=True)
-    filename = f'{device_id}_{int(time.time())}.png'
-    file.save(os.path.join(screenshot_dir, filename))
-    d.device_set(device_id, '', '', '', fields={'screenshot': filename})
-    return {'success': True, 'screenshot': filename}
+@app.route('/api/device/screenshot', methods=['GET'])
+def proxy_screenshot():
+    """Proxy screenshot request from client"""
+    try:
+        import requests as req_lib
+        resp = req_lib.get('http://127.0.0.1:9011/command/screenshot/latest', timeout=5)
+        if resp.status_code == 200:
+            return flask.Response(resp.content, mimetype='image/png')
+        return flask.jsonify({'error': 'No screenshot available'}), 404
+    except:
+        raise u.APIUnsuccessful(503, 'Screenshot unavailable')
+
+@app.route('/api/device/screenshot/take', methods=['POST'])
+def take_screenshot_proxy():
+    """Trigger screenshot on client"""
+    try:
+        import requests as req_lib
+        resp = req_lib.post('http://127.0.0.1:9011/command/screenshot', timeout=5)
+        return resp.json()
+    except:
+        raise u.APIUnsuccessful(503, 'Client not running')
 
 @app.route('/api/device/screenshot/<filename>')
 def get_screenshot(filename):

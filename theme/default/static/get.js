@@ -92,8 +92,6 @@ ${last_updated}
 }
 
 // 截图功能 - 触发截图并显示
-const SCREENSHOT_CLIENT_URL = window.SCREENSHOT_CLIENT_URL || 'http://127.0.0.1:9011';
-
 window.takeScreenshot = function() {
     const screenshotDisplay = document.getElementById('screenshot-display');
     const screenshotImg = document.getElementById('screenshot-img');
@@ -107,30 +105,22 @@ window.takeScreenshot = function() {
         }
     }
     
-    // 调用客户端截图接口（客户端会截图并返回图片）
-    fetch(SCREENSHOT_CLIENT_URL + '/command/screenshot', {
+    // 调用服务器端代理接口（服务器会转发到本地客户端）
+    fetch('/api/device/screenshot/take', {
         method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' }
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('截图失败');
-        }
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // 截图成功，从客户端获取截图图片
-            return fetch(SCREENSHOT_CLIENT_URL + '/command/screenshot/latest?t=' + Date.now());
+            // 截图成功，从服务器端代理获取截图图片
+            return fetch('/api/device/screenshot?t=' + Date.now());
         } else {
             throw new Error('截图失败');
         }
     })
     .then(response => response.blob())
     .then(blob => {
-        // 显示截图
         const url = URL.createObjectURL(blob);
         screenshotImg.src = url;
         if (screenshotTime) {
@@ -142,7 +132,7 @@ window.takeScreenshot = function() {
         if (screenshotDisplay) {
             screenshotDisplay.style.display = 'none';
         }
-        alert('无法连接到客户端，请确认客户端是否正在运行');
+        alert('无法截取屏幕，请确认客户端是否正在运行');
     });
 }
 
