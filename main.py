@@ -22,15 +22,6 @@ app = flask.Flask(
     static_folder=None
 )
 
-# show welcome text
-print(f'''
-Welcome to Sleepy Project 2025!
-Give us a Star 🌟 please: https://github.com/sleepy-project/sleepy
-Bug Report: https://sleepy.wss.moe/bug
-Feature Request: https://sleepy.wss.moe/feature
-Security Report: https://sleepy.wss.moe/security
-'''[1:], flush=True)
-
 # global vars for error handling
 init_error = None
 
