@@ -472,21 +472,27 @@ def device_screenshot():
 def request_screenshot():
     """Check if a screenshot was requested (for client polling)"""
     try:
-        import vercel_blob
-        # Use list to find screenshot request files
-        result = vercel_blob.list(prefix='screenshot_request')
-        blobs = result.get('blobs', []) if result else []
-        if blobs:
-            # Get the most recent one
-            latest = max(blobs, key=lambda x: x.get('updatedAt', ''))
-            import datetime
-            updated_at = datetime.datetime.fromisoformat(latest['updatedAt'].replace('Z', '+00:00'))
+        import vercel_blob, datetime
+        
+        # Try to head the file
+        try:
+            blob = vercel_blob.head('screenshot_request.json')
+            l.info(f'Blob head result: {blob}')
+        except Exception as e:
+            l.info(f'Blob head failed (might not exist): {e}')
+            return {'requested': False}
+        
+        if blob:
+            # updatedAt format: "2024-01-01T12:00:00.000Z"
+            updated_at = datetime.datetime.fromisoformat(blob['updatedAt'].replace('Z', '+00:00'))
             now = datetime.datetime.now(datetime.timezone.utc)
-            if (now - updated_at).total_seconds() < 60:
+            age = (now - updated_at).total_seconds()
+            l.info(f'Blob age: {age} seconds (threshold: 60s)')
+            if age < 60:
                 return {'requested': True}
         return {'requested': False}
     except Exception as e:
-        l.debug(f'Check screenshot request error: {e}')
+        l.error(f'Check screenshot request error: {e}')
         return {'requested': False}
 
 @app.route('/api/device/screenshot/trigger', methods=['POST'])
@@ -494,14 +500,16 @@ def trigger_screenshot():
     """Trigger a screenshot request (called by visitors)"""
     try:
         import vercel_blob
-        # 写入 Blob 记录截图请求时间戳
-        vercel_blob.put(
+        # Write screenshot request timestamp to Blob
+        result = vercel_blob.put(
             path='screenshot_request.json',
             data=json.dumps({'timestamp': datetime.now(timezone.utc).isoformat()}).encode('utf-8'),
             allow_overwrite=True
         )
+        l.info(f'Screenshot trigger result: {result}')
     except Exception as e:
         l.error(f'Failed to write screenshot request: {e}')
+        return {'success': False, 'error': str(e)}, 500
     return {'success': True, 'msg': 'Screenshot requested'}
 
 @app.route('/api/device/screenshot/<filename>')
