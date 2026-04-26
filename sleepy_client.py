@@ -248,7 +248,7 @@ class SleepyClient:
         print()
         
         screenshot_check_counter = 0
-        screenshot_check_freq = max(1, 30 // CHECK_INTERVAL)  # 每30秒检查一次截图请求
+        screenshot_check_freq = max(1, 10 // CHECK_INTERVAL)  # 每 10 秒检查一次截图请求
         
         try:
             while True:
