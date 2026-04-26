@@ -470,10 +470,16 @@ def serve_public(path_name):
 
 # ========== App Started ==========
 
+# Run init immediately for local development
+_do_init()
+
 try:
     p.trigger_event(pl.AppStartedEvent())
 except Exception:
     pass
 
 if __name__ == '__main__':
-    app.run(host=c.main.host, port=c.main.port, debug=c.main.debug, use_reloader=False, threaded=True)
+    if c is not None:
+        app.run(host=c.main.host, port=c.main.port, debug=c.main.debug, use_reloader=False, threaded=True)
+    else:
+        print(f'Failed to initialize: {init_error}')
