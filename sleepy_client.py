@@ -9,6 +9,7 @@ import sys
 import platform
 import requests
 import logging
+import io
 from datetime import datetime
 from client_config import (
     SERVER_URL,
@@ -19,7 +20,8 @@ from client_config import (
     MONITOR_MODE,
     IDLE_TIMEOUT,
     IDLE_STATUS_TEXT,
-    SHOW_WINDOW_TITLE
+    SHOW_WINDOW_TITLE,
+    SCREENSHOT_INTERVAL  # 截图上传间隔（秒）
 )
 
 # 设置日志
@@ -208,6 +210,26 @@ class SleepyClient:
             logger.error(f'截图异常: {e}')
         return None
     
+    def upload_screenshot(self):
+        """上传截图到服务器"""
+        try:
+            screenshot_bytes = self.take_screenshot()
+            if not screenshot_bytes:
+                return
+            
+            files = {'screenshot': ('screenshot.png', screenshot_bytes, 'image/png')}
+            data = {'secret': self.secret, 'device_id': self.device_id}
+            
+            url = f'{self.server_url}/api/device/screenshot'
+            resp = requests.post(url, files=files, data=data, proxies={'http': None, 'https': None}, timeout=30)
+            
+            if resp.status_code == 200:
+                logger.info('截图已上传到服务器')
+            else:
+                logger.error(f'截图上传失败: {resp.status_code} - {resp.text}')
+        except Exception as e:
+            logger.error(f'截图上传异常: {e}')
+    
     def run(self):
         """主循环"""
         logger.info('开始监控设备活动...')
@@ -215,15 +237,24 @@ class SleepyClient:
         logger.info(f'空闲超时: {IDLE_TIMEOUT}秒')
         print()
         
+        screenshot_counter = 0
+        screenshot_freq = max(1, 60 // CHECK_INTERVAL)  # 每60秒截图一次
+        
         try:
             while True:
                 is_using, status_text = self.monitor.get_current_status()
                 self.push_status(is_using, status_text)
+                
+                # 定期上传截图
+                screenshot_counter += 1
+                if screenshot_counter >= screenshot_freq:
+                    self.upload_screenshot()
+                    screenshot_counter = 0
+                
                 time.sleep(CHECK_INTERVAL)
         
         except KeyboardInterrupt:
             logger.info('客户端已停止')
-            # 停止时推送空闲状态
             self.push_status(False, '已关闭')
 
 

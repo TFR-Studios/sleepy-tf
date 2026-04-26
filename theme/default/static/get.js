@@ -105,21 +105,17 @@ window.takeScreenshot = function() {
         }
     }
     
-    // 调用服务器端代理接口（服务器会转发到本地客户端）
-    fetch('/api/device/screenshot/take', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+    // 调用服务器端截图接口
+    fetch('/api/device/screenshot?t=' + Date.now(), {
+        method: 'GET',
+        cache: 'no-cache',
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // 截图成功，从服务器端代理获取截图图片
-            return fetch('/api/device/screenshot?t=' + Date.now());
-        } else {
-            throw new Error('截图失败');
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('截图不可用');
         }
+        return response.blob();
     })
-    .then(response => response.blob())
     .then(blob => {
         const url = URL.createObjectURL(blob);
         screenshotImg.src = url;

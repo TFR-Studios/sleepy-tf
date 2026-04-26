@@ -396,27 +396,39 @@ def device_clear():
     d.device_clear()
     return {'success': True}
 
-@app.route('/api/device/screenshot', methods=['GET'])
-def proxy_screenshot():
-    """Proxy screenshot request from client"""
-    try:
-        import requests as req_lib
-        resp = req_lib.get('http://127.0.0.1:9011/command/screenshot/latest', timeout=5)
-        if resp.status_code == 200:
-            return flask.Response(resp.content, mimetype='image/png')
-        return flask.jsonify({'error': 'No screenshot available'}), 404
-    except:
-        raise u.APIUnsuccessful(503, 'Screenshot unavailable')
-
-@app.route('/api/device/screenshot/take', methods=['POST'])
-def take_screenshot_proxy():
-    """Trigger screenshot on client"""
-    try:
-        import requests as req_lib
-        resp = req_lib.post('http://127.0.0.1:9011/command/screenshot', timeout=5)
-        return resp.json()
-    except:
-        raise u.APIUnsuccessful(503, 'Client not running')
+@app.route('/api/device/screenshot', methods=['GET', 'POST'])
+def device_screenshot():
+    if flask.request.method == 'POST':
+        # Upload screenshot from client
+        device_id = flask.request.form.get('device_id')
+        if not device_id:
+            raise u.APIUnsuccessful(400, 'Missing device_id')
+        if 'screenshot' not in flask.request.files:
+            raise u.APIUnsuccessful(400, 'Missing screenshot file')
+        file = flask.request.files['screenshot']
+        if file.filename == '':
+            raise u.APIUnsuccessful(400, 'Empty filename')
+        import os
+        screenshot_dir = u.get_path('data/screenshots')
+        os.makedirs(screenshot_dir, exist_ok=True)
+        filename = f'{device_id}.png'
+        file.save(os.path.join(screenshot_dir, filename))
+        d.device_set(device_id, '', '', '', fields={'screenshot': filename})
+        return {'success': True, 'screenshot': filename}
+    else:
+        # Serve latest screenshot
+        if d is None:
+            raise u.APIUnsuccessful(503, 'Not initialized')
+        # Find latest screenshot across all devices
+        import os
+        screenshot_dir = u.get_path('data/screenshots')
+        if not os.path.exists(screenshot_dir):
+            raise u.APIUnsuccessful(404, 'No screenshots')
+        screenshots = [f for f in os.listdir(screenshot_dir) if f.endswith('.png')]
+        if not screenshots:
+            raise u.APIUnsuccessful(404, 'No screenshots available')
+        # Serve the first found screenshot
+        return flask.send_file(os.path.join(screenshot_dir, screenshots[0]), mimetype='image/png')
 
 @app.route('/api/device/screenshot/<filename>')
 def get_screenshot(filename):
