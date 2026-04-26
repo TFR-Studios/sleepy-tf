@@ -39,10 +39,34 @@ class Data:
         perf = u.perf_counter()
         self._app = app
         self._c = config
-        self._use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        self._use_blob = False
 
-        if self._use_blob:
-            l.info('[data] 使用 Vercel Blob 存储')
+        # Check if Blob token is available
+        if os.environ.get('BLOB_READ_WRITE_TOKEN'):
+            try:
+                # Test Blob connection
+                vercel_blob.head('test.json')
+                self._use_blob = True
+                l.info('[data] 使用 Vercel Blob 存储')
+            except Exception:
+                # Blob connection failed, fallback to memory
+                l.warning('[data] Vercel Blob 连接失败，使用内存存储')
+                self._memory_store = {
+                    'main': {
+                        'status': 0,
+                        'private_mode': False,
+                        'last_updated': time()
+                    },
+                    'devices': {},
+                    'metrics_meta': {
+                        'today': '',
+                        'week': '',
+                        'month': '',
+                        'year': ''
+                    },
+                    'metrics': {},
+                    'plugin': {}
+                }
         else:
             l.info('[data] 未配置 Vercel Blob，使用内存存储')
             self._memory_store = {
