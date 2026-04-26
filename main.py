@@ -407,10 +407,10 @@ def device_screenshot():
             try:
                 import vercel_blob
                 screenshot_data = file.read()
-                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data)
-                # Clear screenshot_requested flag and save screenshot path
-                fields = {'screenshot': f'screenshots/{device_id}.png', 'screenshot_requested': False}
-                d.device_set(device_id, '', '', '', fields=fields)
+                result = vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data, options={'allowOverwrite': True})
+                # Save the blob URL (not just the path) for serving
+                blob_url = result.get('url', '')
+                d.device_set(device_id, '', '', '', fields={'screenshot': blob_url, 'screenshot_requested': False})
             except Exception as e:
                 l.error(f'Failed to upload screenshot to Blob: {e}')
                 raise u.APIUnsuccessful(500, f'Failed to upload screenshot: {e}')
@@ -435,20 +435,16 @@ def device_screenshot():
         use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
         
         if use_blob:
-            # Get screenshot path from device fields
+            # Serve screenshot from Blob URL stored in device fields
             try:
-                import vercel_blob
                 device = d.device_get('my-pc')
-                screenshot_path = device.get('fields', {}).get('screenshot') if device else None
+                screenshot_url = device.get('fields', {}).get('screenshot') if device else None
                 
-                if not screenshot_path:
+                if not screenshot_url:
                     raise u.APIUnsuccessful(404, 'No screenshots available')
                 
-                # Get signed URL and redirect
-                result = vercel_blob.get(screenshot_path)
-                if result and 'url' in result:
-                    return flask.redirect(result['url'], 302)
-                raise u.APIUnsuccessful(404, 'Screenshot not found')
+                # Redirect directly to the blob URL
+                return flask.redirect(screenshot_url, 302)
             except u.APIUnsuccessful:
                 raise
             except Exception as e:

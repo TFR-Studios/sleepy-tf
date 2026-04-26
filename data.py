@@ -158,7 +158,7 @@ class Data:
             return
         try:
             content = json.dumps(data, ensure_ascii=False).encode('utf-8')
-            vercel_blob.put(path=path, data=content)
+            vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
         except Exception as e:
             l.error(f'[_blob_put_json] Error saving {path}: {e}')
             raise
