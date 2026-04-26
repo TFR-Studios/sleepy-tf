@@ -34,11 +34,16 @@ class BaseEvent:
 
     interception: tuple[t.Any, int] | None = None
     '''拦截后返回结果 (如被拦截)'''
-    request: flask.Request | None = flask.request if flask.request else None
+    request: flask.Request | None = None
     '''触发事件的请求 (如有)'''
 
     def __init__(self):
-        pass
+        try:
+            if flask.request:
+                self.request = flask.request
+        except RuntimeError:
+            # No request context (e.g., module import time in Vercel)
+            pass
 
     def intercept(self, response: t.Any, code: int = 200):
         '''
