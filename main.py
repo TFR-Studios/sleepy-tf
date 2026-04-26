@@ -201,6 +201,10 @@ def before_request():
         secret_ok = True
     elif flask.request.cookies.get('sleepy-secret') == c.main.secret:
         secret_ok = True
+    elif flask.request.method == 'POST' and flask.request.is_json:
+        body = flask.request.get_json(silent=True)
+        if body and body.get('secret') == c.main.secret:
+            secret_ok = True
     if path.startswith('/api/device/') or path.startswith('/api/status/set') or path.startswith('/panel/auth') or path.startswith('/panel/verify'):
         if not secret_ok:
             raise u.APIUnsuccessful(401, 'Wrong Secret')
