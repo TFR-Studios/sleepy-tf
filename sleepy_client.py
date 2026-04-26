@@ -20,8 +20,7 @@ from client_config import (
     MONITOR_MODE,
     IDLE_TIMEOUT,
     IDLE_STATUS_TEXT,
-    SHOW_WINDOW_TITLE,
-    SCREENSHOT_INTERVAL  # 截图上传间隔（秒）
+    SHOW_WINDOW_TITLE
 )
 
 # 设置日志
