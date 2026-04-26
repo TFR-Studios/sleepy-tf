@@ -396,10 +396,14 @@ def device_clear():
     d.device_clear()
     return {'success': True}
 
+_screenshot_requested = False
+_screenshot_lock = __import__('threading').Lock()
+
 @app.route('/api/device/screenshot', methods=['GET', 'POST'])
 def device_screenshot():
     if flask.request.method == 'POST':
         # Upload screenshot from client
+        global _screenshot_requested
         device_id = flask.request.form.get('device_id')
         if not device_id:
             raise u.APIUnsuccessful(400, 'Missing device_id')
@@ -414,12 +418,13 @@ def device_screenshot():
         filename = f'{device_id}.png'
         file.save(os.path.join(screenshot_dir, filename))
         d.device_set(device_id, '', '', '', fields={'screenshot': filename})
+        with _screenshot_lock:
+            _screenshot_requested = False
         return {'success': True, 'screenshot': filename}
     else:
         # Serve latest screenshot
         if d is None:
             raise u.APIUnsuccessful(503, 'Not initialized')
-        # Find latest screenshot across all devices
         import os
         screenshot_dir = u.get_path('data/screenshots')
         if not os.path.exists(screenshot_dir):
@@ -427,8 +432,24 @@ def device_screenshot():
         screenshots = [f for f in os.listdir(screenshot_dir) if f.endswith('.png')]
         if not screenshots:
             raise u.APIUnsuccessful(404, 'No screenshots available')
-        # Serve the first found screenshot
         return flask.send_file(os.path.join(screenshot_dir, screenshots[0]), mimetype='image/png')
+
+@app.route('/api/device/screenshot/request', methods=['GET'])
+def request_screenshot():
+    """Check if a screenshot was requested (for client polling)"""
+    global _screenshot_requested
+    with _screenshot_lock:
+        if _screenshot_requested:
+            return {'requested': True}
+    return {'requested': False}
+
+@app.route('/api/device/screenshot/trigger', methods=['POST'])
+def trigger_screenshot():
+    """Trigger a screenshot request (called by visitors)"""
+    global _screenshot_requested
+    with _screenshot_lock:
+        _screenshot_requested = True
+    return {'success': True, 'msg': 'Screenshot requested'}
 
 @app.route('/api/device/screenshot/<filename>')
 def get_screenshot(filename):

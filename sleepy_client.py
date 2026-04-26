@@ -230,6 +230,17 @@ class SleepyClient:
         except Exception as e:
             logger.error(f'截图上传异常: {e}')
     
+    def check_and_upload_screenshot(self):
+        """检查是否有截图请求，如有则上传"""
+        try:
+            url = f'{self.server_url}/api/device/screenshot/request'
+            resp = requests.get(url, proxies={'http': None, 'https': None}, timeout=10)
+            if resp.status_code == 200 and resp.json().get('requested'):
+                logger.info('收到截图请求，开始截图...')
+                self.upload_screenshot()
+        except Exception as e:
+            logger.error(f'检查截图请求异常: {e}')
+    
     def run(self):
         """主循环"""
         logger.info('开始监控设备活动...')
@@ -237,19 +248,19 @@ class SleepyClient:
         logger.info(f'空闲超时: {IDLE_TIMEOUT}秒')
         print()
         
-        screenshot_counter = 0
-        screenshot_freq = max(1, 60 // CHECK_INTERVAL)  # 每60秒截图一次
+        screenshot_check_counter = 0
+        screenshot_check_freq = max(1, 30 // CHECK_INTERVAL)  # 每30秒检查一次截图请求
         
         try:
             while True:
                 is_using, status_text = self.monitor.get_current_status()
                 self.push_status(is_using, status_text)
                 
-                # 定期上传截图
-                screenshot_counter += 1
-                if screenshot_counter >= screenshot_freq:
-                    self.upload_screenshot()
-                    screenshot_counter = 0
+                # 定期检查是否有截图请求
+                screenshot_check_counter += 1
+                if screenshot_check_counter >= screenshot_check_freq:
+                    self.check_and_upload_screenshot()
+                    screenshot_check_counter = 0
                 
                 time.sleep(CHECK_INTERVAL)
         

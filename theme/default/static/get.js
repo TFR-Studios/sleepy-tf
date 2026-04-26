@@ -91,44 +91,55 @@ ${last_updated}
     }
 }
 
-// 截图功能 - 触发截图并显示
+// 截图功能 - 触发截图并等待结果
 window.takeScreenshot = function() {
     const screenshotDisplay = document.getElementById('screenshot-display');
     const screenshotImg = document.getElementById('screenshot-img');
     const screenshotTime = document.getElementById('screenshot-time');
     
-    // 显示加载状态
     if (screenshotDisplay) {
         screenshotDisplay.style.display = 'block';
-        if (screenshotTime) {
-            screenshotTime.textContent = '正在截取...';
-        }
+        if (screenshotTime) screenshotTime.textContent = '正在请求截图...';
     }
     
-    // 调用服务器端截图接口
-    fetch('/api/device/screenshot?t=' + Date.now(), {
-        method: 'GET',
-        cache: 'no-cache',
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('截图不可用');
-        }
-        return response.blob();
-    })
-    .then(blob => {
-        const url = URL.createObjectURL(blob);
-        screenshotImg.src = url;
-        if (screenshotTime) {
-            screenshotTime.textContent = `截图时间: ${new Date().toLocaleString('zh-CN')}`;
-        }
+    // 1. 发送截图请求
+    fetch('/api/device/screenshot/trigger', { method: 'POST' })
+    .then(resp => resp.json())
+    .then(() => {
+        if (screenshotTime) screenshotTime.textContent = '等待客户端响应...';
+        
+        // 2. 轮询等待截图完成
+        let attempts = 0;
+        const maxAttempts = 20;
+        const pollInterval = setInterval(() => {
+            attempts++;
+            
+            if (attempts > maxAttempts) {
+                clearInterval(pollInterval);
+                alert('截图超时，请重试');
+                screenshotDisplay.style.display = 'none';
+                return;
+            }
+            
+            fetch('/api/device/screenshot?t=' + Date.now(), { cache: 'no-cache' })
+            .then(resp => {
+                if (resp.ok) return resp.blob();
+                throw new Error('waiting');
+            })
+            .then(blob => {
+                clearInterval(pollInterval);
+                screenshotImg.src = URL.createObjectURL(blob);
+                if (screenshotTime) screenshotTime.textContent = `截图时间: ${new Date().toLocaleString('zh-CN')}`;
+            })
+            .catch(() => {
+                // Still waiting, will retry
+            });
+        }, 2000);  // 每2秒轮询一次
     })
     .catch(error => {
         console.error('截图请求失败:', error);
-        if (screenshotDisplay) {
-            screenshotDisplay.style.display = 'none';
-        }
-        alert('无法截取屏幕，请确认客户端是否正在运行');
+        if (screenshotDisplay) screenshotDisplay.style.display = 'none';
+        alert('无法请求截图，请确认客户端是否在线');
     });
 }
 
