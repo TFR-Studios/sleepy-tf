@@ -140,18 +140,16 @@ class Data:
         if not self._use_blob:
             return None
         try:
-            # 使用 head() 获取元数据
-            meta = vercel_blob.head(path)
-            if meta and 'downloadUrl' in meta:
-                url = meta['downloadUrl']
-                # 下载文件内容
+            # 使用 get() 获取 signedUrl (适用于私有存储)
+            result = vercel_blob.get(path)
+            if result and 'downloadUrl' in result:
+                url = result['downloadUrl']
                 import requests
                 resp = requests.get(url)
                 if resp.status_code == 200:
                     return json.loads(resp.text)
             return None
         except Exception:
-            # Blob 不存在或任何错误时返回 None
             return None
 
     def _blob_put_json(self, path: str, data: dict):
@@ -160,7 +158,7 @@ class Data:
             return
         try:
             content = json.dumps(data, ensure_ascii=False).encode('utf-8')
-            vercel_blob.put(path=path, data=content)
+            vercel_blob.put(path=path, data=content, access='private')
         except Exception as e:
             l.error(f'[_blob_put_json] Error saving {path}: {e}')
             raise
