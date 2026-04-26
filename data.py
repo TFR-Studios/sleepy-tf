@@ -126,8 +126,8 @@ class Data:
                 if resp.status_code == 200:
                     return json.loads(resp.text)
             return None
-        except Exception as e:
-            l.debug(f'[_blob_get_json] {path} not found or error: {e}')
+        except Exception:
+            # Blob 不存在或任何错误时返回 None
             return None
 
     def _blob_put_json(self, path: str, data: dict):
