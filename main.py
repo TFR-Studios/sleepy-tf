@@ -22,21 +22,41 @@ app = flask.Flask(
 )
 CORS(app, supports_credentials=True)
 
-# ========== Module-level globals ==========
+# ========== DB Init (must be at module level before first request) ==========
+
+import os
+from data import db
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Vercel override
+if os.environ.get('VERCEL') == '1':
+    os.makedirs('/tmp/sleepy', exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/sleepy/data.db'
+
+# This MUST happen at module level, NOT in before_request
+db.init_app(app)
+with app.app_context():
+    db.create_all()
+
+# Import utils and plugin
+import utils as u
+import plugin as pl
+
+# ========== Globals (populated lazily) ==========
 
 c = None
 d = None
 p = None
 l = None
-u = None
-pl = None
 version_str = 'unknown'
 version = (0, 0, 0)
 init_error = None
 _initialized = False
 
 def _do_init():
-    global _initialized, c, d, p, l, u, pl, version_str, version, init_error
+    global _initialized, c, d, p, l, version_str, version, init_error
     if _initialized:
         return init_error is None
     if init_error:
@@ -44,11 +64,7 @@ def _do_init():
     try:
         from toml import load as load_toml
         from config import Config as config_init
-        import utils
-        from data import Data as data_init
-        import plugin
-        u = utils
-        pl = plugin
+        from data import Data as DataClass
         with open(u.get_path('pyproject.toml'), 'r', encoding='utf-8') as f:
             file = load_toml(f).get('tool', {}).get('sleepy-plugin', {})
             version_str = file.get('version-str', 'unknown')
@@ -83,7 +99,7 @@ def _do_init():
         logging.getLogger('werkzeug').disabled = True
         from flask import cli
         cli.show_server_banner = lambda *_: None
-        d = data_init(config=c, app=app)
+        d = DataClass(config=c, app=app, skip_db_init=True)
         if c.metrics.enabled:
             l.info('[metrics] metrics enabled')
         p = pl.PluginInit(version=version, config=c, data=d, app=app)
@@ -99,7 +115,9 @@ def _do_init():
 # ========== Theme ==========
 
 def render_template(filename, _dirname='templates', _theme=None, **context):
-    _theme = _theme or flask.g.theme
+    if d is None:
+        return None
+    _theme = _theme or flask.g.get('theme', 'default')
     content = d.get_cached_text('theme', f'{_theme}/{_dirname}/{filename}')
     if content is not None:
         return flask.render_template_string(content, **context)
@@ -110,7 +128,7 @@ def render_template(filename, _dirname='templates', _theme=None, **context):
 
 @app.route('/static/<path:filename>', endpoint='static')
 def static_proxy(filename):
-    return flask.redirect(f'/static-themed/{flask.g.theme}/{filename}', 302)
+    return flask.redirect(f'/static-themed/{flask.g.get("theme","default")}/{filename}', 302)
 
 @app.route('/static-themed/<theme>/<path:filename>')
 def static_themed(theme, filename):
@@ -172,7 +190,7 @@ def before_request():
     else:
         flask.g.theme = c.page.theme
     flask.g.secret = c.main.secret
-    # Auth check for protected routes
+    # Auth check
     path = flask.request.path
     secret_ok = False
     if flask.request.args.get('secret') == c.main.secret:
@@ -443,18 +461,14 @@ def verify_secret():
 
 @app.route('/<path:path_name>')
 def serve_public(path_name):
+    if d is None:
+        return flask.abort(404)
     file = d.get_cached_file('data/public', path_name) or d.get_cached_file('public', path_name)
     if file:
         return flask.send_file(file, mimetype=guess_type(path_name)[0] or 'text/plain')
     return flask.abort(404)
 
-# ========== Run ==========
-
-# App started event
-if init_error:
-    @app.route('/<path:path>')
-    def init_error_page(path=None):
-        return f'<h2>Init Failed</h2><p>{init_error}</p>', 500
+# ========== App Started ==========
 
 try:
     p.trigger_event(pl.AppStartedEvent())

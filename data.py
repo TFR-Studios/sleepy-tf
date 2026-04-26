@@ -105,18 +105,27 @@ class Data:
     data 类, 定义 sql 数据表格式
     '''
 
-    def __init__(self, config: ConfigModel, app: Flask):
+    def __init__(self, config: ConfigModel, app: Flask, skip_db_init: bool = False):
         perf = u.perf_counter()
         self._app = app
         self._c = config
         # 配置数据库地址
-        app.config['SQLALCHEMY_DATABASE_URI'] = self._c.main.database
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+        if not skip_db_init:
+            app.config['SQLALCHEMY_DATABASE_URI'] = self._c.main.database
+            app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+            db.init_app(app)
         # 初始化数据库
-        db.init_app(app)
-        with app.app_context():
-            db.create_all()
+        if not skip_db_init:
+            with app.app_context():
+                db.create_all()
+                self._init_db()
+        else:
+            self._init_db()
+
+        l.debug(f'[data] init took {perf()}ms')
+
+    def _init_db(self):
+        with self._app.app_context():
             main_data = _MainData.query.first()
             if not main_data:
                 l.debug(f'[data] main_data not exist, creating a new one')
@@ -134,8 +143,6 @@ class Data:
             # 启动 schedule loop
             self._schedule_loop_th = Thread(target=self._schedule_loop, daemon=True)
             self._schedule_loop_th.start()
-
-        l.debug(f'[data] init took {perf()}ms')
 
     def _throw(self, e: SQLAlchemyError):
         '''
