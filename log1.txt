@@ -1,0 +1,1196 @@
+[2026-04-26 20:44:50]  [DEBUG] | config.py:98 | [config] init took 6.36ms
+[2026-04-26 20:44:51] ℹ️  [INFO]  | main.py:79 | =============== Application Startup ===============
+[2026-04-26 20:44:51] ℹ️  [INFO]  | main.py:80 | Sleepy Server version 5.2-release-20251214 (5.2.0)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 48, in __init__
+    vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 48, in __init__
+    vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'GET', '/?limit=1000', 'HTTP/1.1', 200, None)
+[2026-04-26 20:44:53] ℹ️  [INFO]  | data.py:50 | [data] 使用 Vercel Blob 存储
+[2026-04-26 20:44:53] ⚙️  [DEBUG] | data.py:110 | [data] main_data not exist, creating a new one
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 90, in __init__
+    self._init_data()
+  File "I:\sleepy-tf\data.py", line 101, in _init_data
+    self._ensure_main_data()
+  File "I:\sleepy-tf\data.py", line 116, in _ensure_main_data
+    self._blob_put_json('main.json', main_data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 90, in __init__
+    self._init_data()
+  File "I:\sleepy-tf\data.py", line 101, in _init_data
+    self._ensure_main_data()
+  File "I:\sleepy-tf\data.py", line 116, in _ensure_main_data
+    self._blob_put_json('main.json', main_data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=main.json', 'HTTP/1.1', 200, 278)
+[2026-04-26 20:44:56] ⚙️  [DEBUG] | data.py:125 | [data] metrics_metadata not exist, creating a new one
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 90, in __init__
+    self._init_data()
+  File "I:\sleepy-tf\data.py", line 103, in _init_data
+    self._ensure_metrics_meta()
+  File "I:\sleepy-tf\data.py", line 132, in _ensure_metrics_meta
+    self._blob_put_json('metrics_meta.json', meta)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 88, in _do_init
+    d = DataClass(config=c, app=app)
+  File "I:\sleepy-tf\data.py", line 90, in __init__
+    self._init_data()
+  File "I:\sleepy-tf\data.py", line 103, in _init_data
+    self._ensure_metrics_meta()
+  File "I:\sleepy-tf\data.py", line 132, in _ensure_metrics_meta
+    self._blob_put_json('metrics_meta.json', meta)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=metrics_meta.json', 'HTTP/1.1', 200, 310)
+[2026-04-26 20:44:59] ⚙️  [DEBUG] | data.py:667 | [metrics] today changed:  -> 2026-4-26
+[2026-04-26 20:44:59] ⚙️  [DEBUG] | data.py:96 | [data] init took 8510.08ms
+[2026-04-26 20:44:59] ℹ️  [INFO]  | main.py:90 | [metrics] metrics enabled
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 669, in _metrics_refresh
+    self._reset_metric_field('daily')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\v4_compatible\__init__.py", line 31, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 441, in data
+    return PluginInit.instance.d.get_plugin_data(self.name)
+  File "I:\sleepy-tf\data.py", line 717, in get_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', {})
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 669, in _metrics_refresh
+    self._reset_metric_field('daily')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'GET', '/?limit=1000', 'HTTP/1.1', 200, None)
+[2026-04-26 20:45:02] ⚙️  [DEBUG] | data.py:672 | [metrics] week changed:  -> 2026-17
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 674, in _metrics_refresh
+    self._reset_metric_field('weekly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\v4_compatible\__init__.py", line 31, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 441, in data
+    return PluginInit.instance.d.get_plugin_data(self.name)
+  File "I:\sleepy-tf\data.py", line 717, in get_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', {})
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=plugin/v4_compatible.json', 'HTTP/1.1', 200, 335)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\v4_compatible\__init__.py", line 31, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 445, in data
+    PluginInit.instance.d.set_plugin_data(id=self.name, data=value)
+  File "I:\sleepy-tf\data.py", line 730, in set_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 674, in _metrics_refresh
+    self._reset_metric_field('weekly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'GET', '/?limit=1000', 'HTTP/1.1', 200, None)
+[2026-04-26 20:45:04] ⚙️  [DEBUG] | data.py:677 | [metrics] month changed:  -> 2026-4
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 679, in _metrics_refresh
+    self._reset_metric_field('monthly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\v4_compatible\__init__.py", line 31, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 445, in data
+    PluginInit.instance.d.set_plugin_data(id=self.name, data=value)
+  File "I:\sleepy-tf\data.py", line 730, in set_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=plugin/v4_compatible.json', 'HTTP/1.1', 200, 335)
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /query -> plugin_global.v4_compatible.query_req
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /events -> plugin_global.v4_compatible.events
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /status_list -> plugin_global.v4_compatible.status_list
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /metrics -> plugin_global.v4_compatible.metrics
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /set -> plugin_global.v4_compatible.set_status
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /device/set -> plugin_global.v4_compatible.device_set
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /device/remove -> plugin_global.v4_compatible.device_remove
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /device/clear -> plugin_global.v4_compatible.device_clear
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /device/private_mode -> plugin_global.v4_compatible.device_private_mode
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:816 | Registered Route: /save_data -> plugin_global.v4_compatible.save_data
+[2026-04-26 20:45:05] ℹ️  [INFO]  | plugins\v4_compatible\__init__.py:373 | Version 4 API Compatible Loaded!
+[2026-04-26 20:45:05] ⚙️  [DEBUG] | plugin.py:792 | [plugin] init plugin v4_compatible took 6336.12ms
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\theme_detect\__init__.py", line 17, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 441, in data
+    return PluginInit.instance.d.get_plugin_data(self.name)
+  File "I:\sleepy-tf\data.py", line 717, in get_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', {})
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 679, in _metrics_refresh
+    self._reset_metric_field('monthly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'GET', '/?limit=1000', 'HTTP/1.1', 200, None)
+[2026-04-26 20:45:07] ⚙️  [DEBUG] | data.py:682 | [metrics] year changed:  -> 2026
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 684, in _metrics_refresh
+    self._reset_metric_field('yearly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\theme_detect\__init__.py", line 17, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 441, in data
+    return PluginInit.instance.d.get_plugin_data(self.name)
+  File "I:\sleepy-tf\data.py", line 717, in get_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', {})
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=plugin/theme_detect.json', 'HTTP/1.1', 200, 331)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\theme_detect\__init__.py", line 17, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 445, in data
+    PluginInit.instance.d.set_plugin_data(id=self.name, data=value)
+  File "I:\sleepy-tf\data.py", line 730, in set_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 684, in _metrics_refresh
+    self._reset_metric_field('yearly')
+  File "I:\sleepy-tf\data.py", line 698, in _reset_metric_field
+    metric_paths = self._blob_list(prefix='metrics/')
+  File "I:\sleepy-tf\data.py", line 207, in _blob_list
+    result = vercel_blob.list()
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 191, in list
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'GET', '/?limit=1000', 'HTTP/1.1', 200, None)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 687, in _metrics_refresh
+    self._blob_put_json('metrics_meta.json', meta_metrics)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 766, in urlopen
+    conn = self._get_conn(timeout=pool_timeout)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 292, in _get_conn
+    return conn or self._new_conn()
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 1049, in _new_conn
+    log.debug(
+Message: 'Starting new HTTPS connection (%d): %s:%s'
+Arguments: (1, 'blob.vercel-storage.com', 443)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "I:\sleepy-tf\main.py", line 553, in <module>
+    _do_init()
+  File "I:\sleepy-tf\main.py", line 92, in _do_init
+    p.load_plugins()
+  File "I:\sleepy-tf\plugin.py", line 783, in load_plugins
+    module = importlib.import_module(f'plugins.{plugin_name}')
+  File "C:\Python314\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1398, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1342, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 938, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 762, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "I:\sleepy-tf\plugins\theme_detect\__init__.py", line 17, in <module>
+    p = pl.Plugin(
+  File "I:\sleepy-tf\plugin.py", line 432, in __init__
+    self.data = u.deep_merge_dict(data, self.data)
+  File "I:\sleepy-tf\plugin.py", line 445, in data
+    PluginInit.instance.d.set_plugin_data(id=self.name, data=value)
+  File "I:\sleepy-tf\data.py", line 730, in set_plugin_data
+    self._blob_put_json(f'plugin/{id}.json', data)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=plugin/theme_detect.json', 'HTTP/1.1', 200, 331)
+[2026-04-26 20:45:11] ⚙️  [DEBUG] | plugin.py:792 | [plugin] init plugin theme_detect took 5744.78ms
+[2026-04-26 20:45:11] ℹ️  [INFO]  | plugin.py:804 | 2 plugins enabled: v4_compatible, theme_detect
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python314\Lib\logging\__init__.py", line 1151, in emit
+    msg = self.format(record)
+  File "C:\Python314\Lib\logging\__init__.py", line 999, in format
+    return fmt.format(record)
+           ~~~~~~~~~~^^^^^^^^
+  File "I:\sleepy-tf\utils.py", line 59, in format
+    file = relative_path(record.pathname)  # 源文件名
+  File "I:\sleepy-tf\utils.py", line 397, in relative_path
+    return os.path.relpath(path)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "<frozen ntpath>", line 807, in relpath
+ValueError: path is on mount 'C:', start on mount 'I:'
+Call stack:
+  File "C:\Python314\Lib\threading.py", line 1043, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Python314\Lib\threading.py", line 1081, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Python314\Lib\threading.py", line 1023, in run
+    self._target(*self._args, **self._kwargs)
+  File "I:\sleepy-tf\data.py", line 242, in _schedule_loop
+    self._metrics_refresh()
+  File "I:\sleepy-tf\data.py", line 687, in _metrics_refresh
+    self._blob_put_json('metrics_meta.json', meta_metrics)
+  File "I:\sleepy-tf\data.py", line 161, in _blob_put_json
+    vercel_blob.put(path=path, data=content, options={'allowOverwrite': True})
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 520, in put
+    resp = _request_factory(
+  File "C:\Python314\Lib\site-packages\vercel_blob\blob_store.py", line 126, in _request_factory
+    response = session.request(method, url, timeout=timeout, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 592, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\sessions.py", line 706, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\requests\adapters.py", line 645, in send
+    resp = conn.urlopen(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "C:\Users\hht\AppData\Roaming\Python\Python314\site-packages\urllib3\connectionpool.py", line 544, in _make_request
+    log.debug(
+Message: '%s://%s:%s "%s %s %s" %s %s'
+Arguments: ('https', 'blob.vercel-storage.com', 443, 'PUT', '/?pathname=metrics_meta.json', 'HTTP/1.1', 200, 310)
+[2026-04-26 20:45:11] ⚙️  [DEBUG] | data.py:693 | [_metrics_refresh] took 12324.3ms
+
+
+
+
+
+
+
+
+
+
+
+
+
