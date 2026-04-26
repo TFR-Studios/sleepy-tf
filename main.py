@@ -421,8 +421,13 @@ def device_screenshot():
             file.save(os.path.join(screenshot_dir, filename))
             d.device_set(device_id, '', '', '', fields={'screenshot': filename})
         
-        with _screenshot_lock:
-            _screenshot_requested = False
+        # Clear screenshot request flag from Blob
+        try:
+            import vercel_blob
+            vercel_blob.delete(blob_urls='screenshot_request.json')
+        except Exception as e:
+            l.debug(f'Clear screenshot request flag: {e}')
+        
         return {'success': True, 'screenshot': f'screenshots/{device_id}.png'}
     else:
         # Serve latest screenshot
