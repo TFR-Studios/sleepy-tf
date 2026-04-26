@@ -4,6 +4,7 @@
 import logging
 from datetime import datetime, timedelta, timezone
 import time
+import os
 from urllib.parse import urlparse, parse_qs, urlunparse
 import json
 from traceback import format_exc
@@ -416,7 +417,6 @@ def device_screenshot():
                 raise u.APIUnsuccessful(500, f'Failed to upload screenshot: {e}')
         else:
             # Fallback to local filesystem
-            import os
             screenshot_dir = u.get_path('data/screenshots')
             os.makedirs(screenshot_dir, exist_ok=True)
             filename = f'{device_id}.png'
