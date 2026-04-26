@@ -435,19 +435,19 @@ def device_screenshot():
         use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
         
         if use_blob:
-            # Get screenshot from Blob
+            # Get screenshot path from device fields
             try:
                 import vercel_blob
-                # List all screenshots
-                blobs = vercel_blob.list()
-                screenshots = [b for b in blobs.get('blobs', []) if b['pathname'].startswith('screenshots/')]
-                if not screenshots:
+                device = d.device_get('my-pc')
+                screenshot_path = device.get('fields', {}).get('screenshot') if device else None
+                
+                if not screenshot_path:
                     raise u.APIUnsuccessful(404, 'No screenshots available')
-                # Get the first screenshot
-                screenshot = screenshots[0]
-                meta = vercel_blob.head(screenshot['pathname'])
-                if meta and 'downloadUrl' in meta:
-                    return flask.redirect(meta['downloadUrl'], 302)
+                
+                # Get signed URL and redirect
+                result = vercel_blob.get(screenshot_path)
+                if result and 'url' in result:
+                    return flask.redirect(result['url'], 302)
                 raise u.APIUnsuccessful(404, 'Screenshot not found')
             except u.APIUnsuccessful:
                 raise
