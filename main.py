@@ -466,18 +466,32 @@ def device_screenshot():
 @app.route('/api/device/screenshot/request', methods=['GET'])
 def request_screenshot():
     """Check if a screenshot was requested (for client polling)"""
-    global _screenshot_requested
-    with _screenshot_lock:
-        if _screenshot_requested:
-            return {'requested': True}
-    return {'requested': False}
+    try:
+        import vercel_blob
+        result = vercel_blob.head('screenshot_request.json')
+        if result and 'updatedAt' in result:
+            import datetime
+            # 检查请求是否在 60 秒内发出
+            updated_at = datetime.datetime.fromisoformat(result['updatedAt'].replace('Z', '+00:00'))
+            now = datetime.datetime.now(datetime.timezone.utc)
+            if (now - updated_at).total_seconds() < 60:
+                return {'requested': True}
+        return {'requested': False}
+    except Exception:
+        return {'requested': False}
 
 @app.route('/api/device/screenshot/trigger', methods=['POST'])
 def trigger_screenshot():
     """Trigger a screenshot request (called by visitors)"""
-    global _screenshot_requested
-    with _screenshot_lock:
-        _screenshot_requested = True
+    try:
+        import vercel_blob
+        # 写入 Blob 记录截图请求时间戳
+        vercel_blob.put(
+            path='screenshot_request.json',
+            data=json.dumps({'timestamp': datetime.now(timezone.utc).isoformat()}).encode('utf-8')
+        )
+    except Exception as e:
+        l.error(f'Failed to write screenshot request: {e}')
     return {'success': True, 'msg': 'Screenshot requested'}
 
 @app.route('/api/device/screenshot/<filename>')

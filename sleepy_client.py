@@ -234,9 +234,15 @@ class SleepyClient:
         try:
             url = f'{self.server_url}/api/device/screenshot/request'
             resp = requests.get(url, proxies={'http': None, 'https': None}, timeout=10)
-            if resp.status_code == 200 and resp.json().get('requested'):
-                logger.info('收到截图请求，开始截图...')
-                self.upload_screenshot()
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get('requested'):
+                    logger.info('✅ 收到截图请求，开始截图...')
+                    self.upload_screenshot()
+                else:
+                    logger.debug('❌ 没有截图请求')
+            else:
+                logger.error(f'检查截图请求失败: {resp.status_code}')
         except Exception as e:
             logger.error(f'检查截图请求异常: {e}')
     
@@ -245,6 +251,7 @@ class SleepyClient:
         logger.info('开始监控设备活动...')
         logger.info(f'检测间隔: {CHECK_INTERVAL}秒')
         logger.info(f'空闲超时: {IDLE_TIMEOUT}秒')
+        logger.info(f'截图检查频率: 每{max(1, 10 // CHECK_INTERVAL) * CHECK_INTERVAL}秒')
         print()
         
         screenshot_check_counter = 0
