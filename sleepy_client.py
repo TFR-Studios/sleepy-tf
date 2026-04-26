@@ -335,11 +335,4 @@ if __name__ == '__main__':
     logger.info('访客可通过网页调用截图功能')
     
     # 主线程运行客户端
-    try:
-        while True:
-            is_using, status_text = client.monitor.get_current_status()
-            client.push_status(is_using, status_text)
-            time.sleep(CHECK_INTERVAL)
-    except KeyboardInterrupt:
-        logger.info('客户端已停止')
-        client.push_status(False, '已关闭')
+    client.run()
