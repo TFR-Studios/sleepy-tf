@@ -22,23 +22,9 @@ app = flask.Flask(
 )
 CORS(app, supports_credentials=True)
 
-# ========== DB Init (must be at module level before first request) ==========
+# ========== No DB Init needed (Vercel Blob handles persistence) ==========
 
 import os
-from data import db
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Vercel override
-if os.environ.get('VERCEL') == '1':
-    os.makedirs('/tmp/sleepy', exist_ok=True)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/sleepy/data.db'
-
-# This MUST happen at module level, NOT in before_request
-db.init_app(app)
-with app.app_context():
-    db.create_all()
 
 # Import utils and plugin
 import utils as u
@@ -99,7 +85,7 @@ def _do_init():
         logging.getLogger('werkzeug').disabled = True
         from flask import cli
         cli.show_server_banner = lambda *_: None
-        d = DataClass(config=c, app=app, skip_db_init=True)
+        d = DataClass(config=c, app=app)
         if c.metrics.enabled:
             l.info('[metrics] metrics enabled')
         p = pl.PluginInit(version=version, config=c, data=d, app=app)
@@ -412,27 +398,70 @@ def device_screenshot():
         file = flask.request.files['screenshot']
         if file.filename == '':
             raise u.APIUnsuccessful(400, 'Empty filename')
-        import os
-        screenshot_dir = u.get_path('data/screenshots')
-        os.makedirs(screenshot_dir, exist_ok=True)
-        filename = f'{device_id}.png'
-        file.save(os.path.join(screenshot_dir, filename))
-        d.device_set(device_id, '', '', '', fields={'screenshot': filename})
+        
+        # Check if Vercel Blob is configured
+        use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        
+        if use_blob:
+            # Upload to Vercel Blob
+            try:
+                import vercel_blob
+                screenshot_data = file.read()
+                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data)
+                d.device_set(device_id, '', '', '', fields={'screenshot': f'screenshots/{device_id}.png', 'screenshot_url': f'screenshots/{device_id}.png'})
+            except Exception as e:
+                l.error(f'Failed to upload screenshot to Blob: {e}')
+                raise u.APIUnsuccessful(500, f'Failed to upload screenshot: {e}')
+        else:
+            # Fallback to local filesystem
+            import os
+            screenshot_dir = u.get_path('data/screenshots')
+            os.makedirs(screenshot_dir, exist_ok=True)
+            filename = f'{device_id}.png'
+            file.save(os.path.join(screenshot_dir, filename))
+            d.device_set(device_id, '', '', '', fields={'screenshot': filename})
+        
         with _screenshot_lock:
             _screenshot_requested = False
-        return {'success': True, 'screenshot': filename}
+        return {'success': True, 'screenshot': f'screenshots/{device_id}.png'}
     else:
         # Serve latest screenshot
         if d is None:
             raise u.APIUnsuccessful(503, 'Not initialized')
-        import os
-        screenshot_dir = u.get_path('data/screenshots')
-        if not os.path.exists(screenshot_dir):
-            raise u.APIUnsuccessful(404, 'No screenshots')
-        screenshots = [f for f in os.listdir(screenshot_dir) if f.endswith('.png')]
-        if not screenshots:
-            raise u.APIUnsuccessful(404, 'No screenshots available')
-        return flask.send_file(os.path.join(screenshot_dir, screenshots[0]), mimetype='image/png')
+        
+        # Check if Vercel Blob is configured
+        use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        
+        if use_blob:
+            # Get screenshot from Blob
+            try:
+                import vercel_blob
+                # List all screenshots
+                blobs = vercel_blob.list()
+                screenshots = [b for b in blobs.get('blobs', []) if b['pathname'].startswith('screenshots/')]
+                if not screenshots:
+                    raise u.APIUnsuccessful(404, 'No screenshots available')
+                # Get the first screenshot
+                screenshot = screenshots[0]
+                meta = vercel_blob.head(screenshot['pathname'])
+                if meta and 'downloadUrl' in meta:
+                    return flask.redirect(meta['downloadUrl'], 302)
+                raise u.APIUnsuccessful(404, 'Screenshot not found')
+            except u.APIUnsuccessful:
+                raise
+            except Exception as e:
+                l.error(f'Failed to get screenshot from Blob: {e}')
+                raise u.APIUnsuccessful(500, f'Failed to get screenshot: {e}')
+        else:
+            # Fallback to local filesystem
+            import os
+            screenshot_dir = u.get_path('data/screenshots')
+            if not os.path.exists(screenshot_dir):
+                raise u.APIUnsuccessful(404, 'No screenshots')
+            screenshots = [f for f in os.listdir(screenshot_dir) if f.endswith('.png')]
+            if not screenshots:
+                raise u.APIUnsuccessful(404, 'No screenshots available')
+            return flask.send_file(os.path.join(screenshot_dir, screenshots[0]), mimetype='image/png')
 
 @app.route('/api/device/screenshot/request', methods=['GET'])
 def request_screenshot():
