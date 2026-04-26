@@ -158,7 +158,7 @@ class Data:
             return
         try:
             content = json.dumps(data, ensure_ascii=False).encode('utf-8')
-            vercel_blob.put(path=path, data=content, allow_overwrite=True)
+            vercel_blob.put(path=path, data=content)
         except Exception as e:
             l.error(f'[_blob_put_json] Error saving {path}: {e}')
             raise
@@ -185,7 +185,7 @@ class Data:
         if not self._use_blob:
             return
         try:
-            vercel_blob.put(path=path, data=data, allow_overwrite=True)
+            vercel_blob.put(path=path, data=data)
         except Exception as e:
             l.error(f'[_blob_put_bytes] Error saving {path}: {e}')
             raise

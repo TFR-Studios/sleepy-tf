@@ -407,7 +407,7 @@ def device_screenshot():
             try:
                 import vercel_blob
                 screenshot_data = file.read()
-                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data, allow_overwrite=True)
+                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data)
                 # Clear screenshot_requested flag and save screenshot path
                 fields = {'screenshot': f'screenshots/{device_id}.png', 'screenshot_requested': False}
                 d.device_set(device_id, '', '', '', fields=fields)
