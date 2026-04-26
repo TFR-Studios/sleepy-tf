@@ -205,8 +205,8 @@ def before_request():
         body = flask.request.get_json(silent=True)
         if body and body.get('secret') == c.main.secret:
             secret_ok = True
-    if path == '/api/device/screenshot' or path == '/api/device/screenshot/take' or path.startswith('/api/device/screenshot/') or path.startswith('/api/status/query') or path.startswith('/api/status/list') or path.startswith('/api/status/events'):
-        # Public read-only routes (screenshot is proxied to local client)
+    if path == '/api/device/screenshot' or path == '/api/device/screenshot/take' or path == '/api/device/screenshot/request' or path == '/api/device/screenshot/trigger' or path.startswith('/api/device/screenshot/') or path.startswith('/api/status/query') or path.startswith('/api/status/list') or path.startswith('/api/status/events'):
+        # Public screenshot routes and read-only status routes
         pass
     elif path.startswith('/api/device/') or path.startswith('/api/status/set') or path.startswith('/panel/auth') or path.startswith('/panel/verify'):
         if not secret_ok:
