@@ -29,7 +29,7 @@ from pywintypes import error as pywinerror  # type: ignore
 
 # --- config start
 # 服务地址, 末尾同样不带 /
-SERVER: str = 'http://localhost:9010'
+SERVER: str = 'https://sj.tfr-studio.top'
 # 密钥
 SECRET: str = 'wyf9test'
 # 设备标识符，唯一 (它也会被包含在 api 返回中, 不要包含敏感数据)

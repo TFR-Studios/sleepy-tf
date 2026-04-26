@@ -30,7 +30,7 @@ except ImportError:
 # 密钥
 SECRET = ''
 # 服务地址, 末尾不加 `/`
-SERVER = 'http://127.0.0.1:9010'
+SERVER = 'https://sj.tfr-studio.top'
 # 请求重试次数
 RETRY = 3
 # 是否显示原始 JSON 响应

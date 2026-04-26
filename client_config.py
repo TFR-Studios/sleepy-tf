@@ -2,7 +2,7 @@
 # 配置设备信息和服务器连接参数
 
 # ========== 服务器配置 ==========
-SERVER_URL = "http://localhost:9010"
+SERVER_URL = "https://sj.tfr-studio.top"
 SECRET = "Wnnz3tz!"
 
 # ========== 设备配置 ==========

@@ -3,7 +3,7 @@
 # Author: NT_AUTHORITY
 
 # CONFIGURATION
-$SERVER = "http://localhost:9010" # Your sever address, e.g., https://sleepy.wyf9.top don't use / at the end!
+$SERVER = "https://sj.tfr-studio.top" # Your sever address, e.g., https://sj.tfr-studio.top don't use / at the end!
 $SECRET = "Your_Secret_Password" # Don't leak this!
 $DEVICE_ID = "your_device_id" # Your device ID, don't contain sensitive information, like password, etc.
 $DEVICE_SHOW_NAME = "Your Device Display Name" # Displays on the webpage, can be anything you want. e.g., "My PC", "My Laptop", etc.

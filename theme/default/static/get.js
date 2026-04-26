@@ -92,7 +92,6 @@ ${last_updated}
 }
 
 // 截图功能 - 触发截图并显示
-// 客户端地址配置，Vercel 部署后需要修改为公网地址
 const SCREENSHOT_CLIENT_URL = window.SCREENSHOT_CLIENT_URL || 'http://127.0.0.1:9011';
 
 window.takeScreenshot = function() {

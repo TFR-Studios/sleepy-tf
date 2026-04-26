@@ -25,7 +25,7 @@ from pywintypes import error as pywinerror
 # ----- 配置部分 -----
 
 # 服务端配置
-SERVER_URL = "http://localhost:9010"  # 服务端地址，末尾不带斜杠
+SERVER_URL = "https://sj.tfr-studio.top"  # 服务端地址，末尾不带斜杠
 SECRET = "wyf9test"  # 与服务端一致的密钥
 
 # 设备配置

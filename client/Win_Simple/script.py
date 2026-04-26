@@ -19,7 +19,7 @@ class AppConfig:
     _DEFAULT_CONFIG = """\
 [settings]
 # 服务地址, 末尾不带 /
-SERVER = http://localhost:7860
+SERVER = https://sj.tfr-studio.top
 # 密钥，不要引号！
 SECRET = 
 DEVICE_ID = Win_Simple
@@ -67,7 +67,7 @@ BLACKLIST = ExampleApp|Privacy Information
         
         try:
             # 基本配置
-            self.server = self.config.get('settings', 'SERVER', fallback='localhost:7860')
+            self.server = self.config.get('settings', 'SERVER', fallback='https://sj.tfr-studio.top')
             self.secret = self.config.get('settings', 'SECRET', fallback='')
             self.device_id = self.config.get('settings', 'DEVICE_ID', fallback='Win_Simple')
             self.device_show_name = self.config.get('settings', 'DEVICE_SHOW_NAME', fallback='Computer')
