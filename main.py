@@ -407,8 +407,8 @@ def device_screenshot():
             try:
                 import vercel_blob
                 screenshot_data = file.read()
-                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data)
-                d.device_set(device_id, '', '', '', fields={'screenshot': f'screenshots/{device_id}.png', 'screenshot_url': f'screenshots/{device_id}.png'})
+                vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data, allow_overwrite=True)
+                d.device_set(device_id, '', '', '', fields={'screenshot': f'screenshots/{device_id}.png'})
             except Exception as e:
                 l.error(f'Failed to upload screenshot to Blob: {e}')
                 raise u.APIUnsuccessful(500, f'Failed to upload screenshot: {e}')
@@ -493,7 +493,8 @@ def trigger_screenshot():
         # 写入 Blob 记录截图请求时间戳
         vercel_blob.put(
             path='screenshot_request.json',
-            data=json.dumps({'timestamp': datetime.now(timezone.utc).isoformat()}).encode('utf-8')
+            data=json.dumps({'timestamp': datetime.now(timezone.utc).isoformat()}).encode('utf-8'),
+            allow_overwrite=True
         )
     except Exception as e:
         l.error(f'Failed to write screenshot request: {e}')
