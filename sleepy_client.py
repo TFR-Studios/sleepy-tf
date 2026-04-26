@@ -233,7 +233,9 @@ class SleepyClient:
         """检查是否有截图请求，如有则上传"""
         try:
             url = f'{self.server_url}/api/device/screenshot/request'
+            logger.debug(f'检查截图请求: {url}')
             resp = requests.get(url, proxies={'http': None, 'https': None}, timeout=10)
+            logger.debug(f'截图请求响应: {resp.status_code} - {resp.text}')
             if resp.status_code == 200:
                 data = resp.json()
                 if data.get('requested'):
@@ -242,7 +244,7 @@ class SleepyClient:
                 else:
                     logger.debug('❌ 没有截图请求')
             else:
-                logger.error(f'检查截图请求失败: {resp.status_code}')
+                logger.error(f'检查截图请求失败: HTTP {resp.status_code}')
         except Exception as e:
             logger.error(f'检查截图请求异常: {e}')
     
