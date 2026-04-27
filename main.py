@@ -399,15 +399,22 @@ def device_screenshot():
         if file.filename == '':
             raise u.APIUnsuccessful(400, 'Empty filename')
         
-        # Check if Vercel Blob is configured
-        use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        # Check if Vercel Blob is available (both token and module must exist)
+        use_blob = False
+        blob_module = None
+        try:
+            import vercel_blob as _blob
+            blob_module = _blob
+            use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        except ImportError:
+            l.warning('vercel_blob not installed, using local filesystem fallback')
+            use_blob = False
         
-        if use_blob:
+        if use_blob and blob_module:
             # Upload to Vercel Blob
             try:
-                import vercel_blob
                 screenshot_data = file.read()
-                result = vercel_blob.put(path=f'screenshots/{device_id}.png', data=screenshot_data, options={'allowOverwrite': True})
+                result = blob_module.put(path=f'screenshots/{device_id}.png', data=screenshot_data, options={'allowOverwrite': True})
                 # Save the blob URL (not just the path) for serving
                 blob_url = result.get('url', '')
                 d.device_set(device_id, '', '', '', fields={'screenshot': blob_url, 'screenshot_requested': False})
@@ -430,8 +437,13 @@ def device_screenshot():
         if d is None:
             raise u.APIUnsuccessful(503, 'Not initialized')
         
-        # Check if Vercel Blob is configured
-        use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        # Check if Vercel Blob is available
+        use_blob = False
+        try:
+            import vercel_blob as _blob_check
+            use_blob = os.environ.get('BLOB_READ_WRITE_TOKEN') is not None
+        except ImportError:
+            use_blob = False
         
         if use_blob:
             # Serve screenshot from Blob URL stored in device fields
