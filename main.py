@@ -488,9 +488,16 @@ def request_screenshot():
 def trigger_screenshot():
     """Trigger a screenshot request (called by visitors)"""
     try:
-        # Set screenshot_requested flag on device
-        d.device_set(id='my-pc', show_name=None, using=None, status=None, 
-                     fields={'screenshot_requested': True})
+        # First, ensure device exists (register if needed)
+        device = d.device_get('my-pc')
+        if not device:
+            # Device doesn't exist yet, register it first
+            d.device_set(id='my-pc', show_name='我的电脑', using=True, status='在线',
+                        fields={'screenshot_requested': True})
+        else:
+            # Device exists, just update the flag
+            d.device_set(id='my-pc', show_name=None, using=None, status=None,
+                        fields={'screenshot_requested': True})
     except Exception as e:
         l.error(f'Failed to trigger screenshot: {e}')
         return {'success': False, 'error': str(e)}, 500
