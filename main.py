@@ -25,8 +25,6 @@ CORS(app, supports_credentials=True)
 
 # ========== No DB Init needed (Vercel Blob handles persistence) ==========
 
-import os
-
 # Import utils and plugin
 import utils as u
 import plugin as pl
@@ -452,7 +450,6 @@ def device_screenshot():
                 raise u.APIUnsuccessful(500, f'Failed to get screenshot: {e}')
         else:
             # Fallback to local filesystem
-            import os
             screenshot_dir = u.get_path('data/screenshots')
             if not os.path.exists(screenshot_dir):
                 raise u.APIUnsuccessful(404, 'No screenshots')
@@ -488,7 +485,6 @@ def trigger_screenshot():
 
 @app.route('/api/device/screenshot/<filename>')
 def get_screenshot(filename):
-    import os
     screenshot_path = u.get_path(f'data/screenshots/{filename}')
     if not os.path.exists(screenshot_path):
         raise u.APIUnsuccessful(404, 'Screenshot not found')
