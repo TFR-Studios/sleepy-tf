@@ -234,6 +234,43 @@ class SleepyClient:
         except Exception as e:
             logger.error(f'推送异常: {e}')
     
+    def set_global_status(self, status_id: int):
+        """
+        设置全局状态（活着/似了）
+        status_id: 0 = 活着, 1 = 似了
+        """
+        try:
+            url = f'{self.server_url}/api/status/set'
+            params = {
+                'secret': self.secret,
+                'status': status_id
+            }
+            
+            logger.info(f'[GLOBAL] Setting global status to ID={status_id}')
+            
+            response = requests.get(
+                url,
+                params=params,
+                timeout=10,
+                proxies={'http': None, 'https': None}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    logger.info(f'[SUCCESS] Global status updated to ID={status_id}')
+                    return True
+                else:
+                    logger.error(f'[ERROR] Failed to update global status: {data}')
+                    return False
+            else:
+                logger.error(f'[ERROR] HTTP error: {response.status_code}')
+                return False
+                
+        except Exception as e:
+            logger.error(f'[ERROR] Failed to set global status: {e}')
+            return False
+    
     def cleanup(self, reason='程序关闭'):
         """清理函数 - 退出时发送"似了"状态"""
         log_msg = f'[CLEANUP] Starting cleanup - Reason: {reason}'
@@ -250,11 +287,15 @@ class SleepyClient:
             pass
         
         try:
-            # 发送"似了"状态
-            self.push_status(False, '似了')
+            # 设置全局状态为"似了" (status_id = 1)
+            success = self.set_global_status(1)  # 1 = "似了"
             
-            success_msg = '[CLEANUP] Status updated to "似了" successfully'
-            logger.info(success_msg)
+            if success:
+                success_msg = '[CLEANUP] Global status updated to "似了" (ID=1) successfully'
+                logger.info(success_msg)
+            else:
+                success_msg = '[CLEANUP] Failed to update global status to "似了"'
+                logger.error(success_msg)
             
             try:
                 with open('client_cleanup.log', 'a', encoding='utf-8') as f:
@@ -265,11 +306,11 @@ class SleepyClient:
             except:
                 pass
             
-            # 等待请求完成（重要！）
+            # 等待请求完成
             time.sleep(2)
             
         except Exception as e:
-            error_msg = f'[CLEANUP] Failed: {e}'
+            error_msg = f'[CLEANUP] Exception: {e}'
             logger.error(error_msg)
             
             try:
@@ -358,6 +399,9 @@ class SleepyClient:
         else:
             print('>>> ⚠️ 退出时会自动将状态更新为"似了"(Ctrl+C)')
         print()
+        
+        # 启动时设置全局状态为"活着"
+        self.set_global_status(0)  # 0 = "活着"
         
         # 注册退出处理器（程序关闭、关机时自动调用）
         def exit_handler():
