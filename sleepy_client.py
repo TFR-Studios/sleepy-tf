@@ -10,6 +10,8 @@ import platform
 import requests
 import logging
 import io
+import atexit
+import signal
 from datetime import datetime
 from client_config import (
     SERVER_URL,
@@ -182,6 +184,17 @@ class SleepyClient:
         except Exception as e:
             logger.error(f'推送异常: {e}')
     
+    def cleanup(self, reason='程序关闭'):
+        """清理函数 - 退出时发送"似了"状态"""
+        logger.info(f'正在清理... 原因: {reason}')
+        
+        try:
+            # 发送"似了"状态
+            self.push_status(False, '似了')
+            logger.info('✅ 状态已更新为"似了"')
+        except Exception as e:
+            logger.error(f'❌ 清理失败: {e}')
+    
     def take_screenshot(self):
         """截取屏幕并返回字节流"""
         try:
@@ -254,7 +267,20 @@ class SleepyClient:
         logger.info(f'截图检查频率: 每{max(1, 10 // CHECK_INTERVAL) * CHECK_INTERVAL}秒')
         print()
         print('>>> 客户端已启动，等待截图请求...')
+        print('>>> 退出时会自动将状态更新为"似了"')
         print()
+        
+        # 注册退出处理器（程序关闭、关机时自动调用）
+        def exit_handler():
+            self.cleanup('程序退出')
+        
+        atexit.register(exit_handler)
+        
+        # 注册信号处理器（Ctrl+C、终止信号等）
+        if platform.system() != 'Windows':
+            # Unix/Linux/macOS
+            signal.signal(signal.SIGTERM, lambda s, f: (self.cleanup(f'收到信号 {f}'), sys.exit(0)))
+            signal.signal(signal.SIGINT, lambda s, f: (self.cleanup(f'收到信号 {f}'), sys.exit(0)))
         
         screenshot_check_counter = 0
         screenshot_check_freq = max(1, 10 // CHECK_INTERVAL)  # 每 10 秒检查一次截图请求
@@ -274,7 +300,7 @@ class SleepyClient:
         
         except KeyboardInterrupt:
             logger.info('客户端已停止')
-            self.push_status(False, '已关闭')
+            self.cleanup('用户中断 (Ctrl+C)')
 
 
 if __name__ == '__main__':
