@@ -13,6 +13,50 @@ import io
 import atexit
 import signal
 from datetime import datetime
+
+# Windows 特定导入 - 用于捕获关机/关闭窗口事件
+if platform.system() == 'Windows':
+    try:
+        import ctypes
+        from ctypes import wintypes
+        
+        # 定义 Windows API 函数和常量
+        kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+        
+        # 控制台事件类型
+        CTRL_C_EVENT = 0
+        CTRL_BREAK_EVENT = 1
+        CTRL_CLOSE_EVENT = 2  # 关闭控制台窗口
+        CTRL_LOGOFF_EVENT = 5  # 用户注销
+        CTRL_SHUTDOWN_EVENT = 6  # 系统关机
+        
+        # 回调函数类型
+        PHANDLER_ROUTINE = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.DWORD)
+        
+        def win_console_handler(ctrl_type):
+            """Windows 控制台事件处理器"""
+            if ctrl_type in (CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT):
+                reason_map = {
+                    CTRL_CLOSE_EVENT: '关闭窗口',
+                    CTRL_LOGOFF_EVENT: '系统注销',
+                    CTRL_SHUTDOWN_EVENT: '系统关机'
+                }
+                # 获取全局 client 实例并清理
+                if hasattr(sys, '_sleepy_client_instance'):
+                    sys._sleepy_client_instance.cleanup(reason_map.get(ctrl_type, f'Windows事件{ctrl_type}'))
+                return True  # 返回 True 表示已处理
+            return False  # 其他事件交给默认处理器
+        
+        # 设置控制台处理器
+        handler = PHANDLER_ROUTINE(win_console_handler)
+        kernel32.SetConsoleCtrlHandler(handler, True)
+        
+        WINDOWS_HANDLER_AVAILABLE = True
+    except Exception as e:
+        logging.warning(f'无法注册 Windows 控制台处理器: {e}')
+        WINDOWS_HANDLER_AVAILABLE = False
+else:
+    WINDOWS_HANDLER_AVAILABLE = False
 from client_config import (
     SERVER_URL,
     SECRET,
@@ -132,10 +176,16 @@ class SleepyClient:
         self.last_push_time = 0
         self.last_status = None
         
+        # 保存实例引用（供 Windows 控制台事件处理器使用）
+        sys._sleepy_client_instance = self
+        
         logger.info(f'Sleepy Client 已启动')
         logger.info(f'服务器: {self.server_url}')
         logger.info(f'设备ID: {self.device_id}')
         logger.info(f'设备名称: {self.device_name}')
+        
+        if WINDOWS_HANDLER_AVAILABLE:
+            logger.info('✅ Windows 关闭/关机事件捕获已启用')
     
     def push_status(self, is_using: bool, status_text: str):
         """推送设备状态到服务端"""
@@ -267,7 +317,10 @@ class SleepyClient:
         logger.info(f'截图检查频率: 每{max(1, 10 // CHECK_INTERVAL) * CHECK_INTERVAL}秒')
         print()
         print('>>> 客户端已启动，等待截图请求...')
-        print('>>> 退出时会自动将状态更新为"似了"')
+        if WINDOWS_HANDLER_AVAILABLE:
+            print('>>> ✅ Windows: 关闭窗口/注销/关机时自动更新状态为"似了"')
+        else:
+            print('>>> ⚠️ 退出时会自动将状态更新为"似了"(Ctrl+C)')
         print()
         
         # 注册退出处理器（程序关闭、关机时自动调用）
