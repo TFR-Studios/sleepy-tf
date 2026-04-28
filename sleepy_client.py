@@ -83,6 +83,7 @@ class ActivityMonitor:
     
     def __init__(self):
         self.last_activity_time = time.time()
+        self.last_window_title = ""  # 记录最后一次的窗口标题
         
         # 根据操作系统选择监控方式
         self.system = platform.system()
@@ -143,24 +144,30 @@ class ActivityMonitor:
         current_time = time.time()
         idle_duration = current_time - self.last_activity_time
         
-        # 检查是否空闲
-        if idle_duration > IDLE_TIMEOUT:
-            return False, IDLE_STATUS_TEXT
-        
-        # 如果活跃，尝试获取当前活动窗口标题
+        # 始终尝试获取当前窗口标题（无论是否空闲）
         status_text = "正在使用"
         if hasattr(self, 'window_monitor') and self.window_monitor:
             try:
                 active_window = self.window_monitor.getActiveWindow()
                 if active_window and active_window.title:
                     title = active_window.title
+                    self.last_window_title = title  # 更新最后记录的标题
                     if SHOW_WINDOW_TITLE:
                         status_text = title
                     logger.debug(f'活动窗口: {title}')
             except Exception as e:
                 logger.debug(f'获取窗口标题失败: {e}')
         
-        return True, status_text
+        # 检查是否空闲
+        is_using = idle_duration <= IDLE_TIMEOUT
+        if not is_using:
+            # 空闲时：使用最后记录的窗口标题，而不是固定文本
+            if self.last_window_title:
+                status_text = f"[离开] {self.last_window_title}"
+            else:
+                status_text = IDLE_STATUS_TEXT
+        
+        return is_using, status_text
 
 
 class SleepyClient:
