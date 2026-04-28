@@ -236,14 +236,50 @@ class SleepyClient:
     
     def cleanup(self, reason='程序关闭'):
         """清理函数 - 退出时发送"似了"状态"""
-        logger.info(f'正在清理... 原因: {reason}')
+        log_msg = f'[CLEANUP] Starting cleanup - Reason: {reason}'
+        logger.info(log_msg)
+        
+        # 同时写入文件日志（防止窗口关闭后看不到）
+        try:
+            with open('client_cleanup.log', 'a', encoding='utf-8') as f:
+                from datetime import datetime
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                f.write(f'[{timestamp}] {log_msg}\n')
+                f.flush()
+        except:
+            pass
         
         try:
             # 发送"似了"状态
             self.push_status(False, '似了')
-            logger.info('✅ 状态已更新为"似了"')
+            
+            success_msg = '[CLEANUP] Status updated to "似了" successfully'
+            logger.info(success_msg)
+            
+            try:
+                with open('client_cleanup.log', 'a', encoding='utf-8') as f:
+                    from datetime import datetime
+                    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    f.write(f'[{timestamp}] {success_msg}\n')
+                    f.flush()
+            except:
+                pass
+            
+            # 等待请求完成（重要！）
+            time.sleep(2)
+            
         except Exception as e:
-            logger.error(f'❌ 清理失败: {e}')
+            error_msg = f'[CLEANUP] Failed: {e}'
+            logger.error(error_msg)
+            
+            try:
+                with open('client_cleanup.log', 'a', encoding='utf-8') as f:
+                    from datetime import datetime
+                    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    f.write(f'[{timestamp}] {error_msg}\n')
+                    f.flush()
+            except:
+                pass
     
     def take_screenshot(self):
         """截取屏幕并返回字节流"""
