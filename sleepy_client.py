@@ -281,7 +281,7 @@ class SleepyClient:
             pass
         
         try:
-            # 设置全局状态为"似了" (status_id = 1)
+            # 1. 设置全局状态为"似了" (status_id = 1)
             success = self.set_global_status(1)  # 1 = "似了"
             
             if success:
@@ -291,11 +291,17 @@ class SleepyClient:
                 success_msg = '[CLEANUP] Failed to update global status to "似了"'
                 logger.error(success_msg)
             
+            # 2. 推送设备状态为"未在使用"
+            self.push_status(False, IDLE_STATUS_TEXT)
+            device_msg = '[CLEANUP] Device status updated to "未在使用"'
+            logger.info(device_msg)
+            
             try:
                 with open('client_cleanup.log', 'a', encoding='utf-8') as f:
                     from datetime import datetime
                     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     f.write(f'[{timestamp}] {success_msg}\n')
+                    f.write(f'[{timestamp}] {device_msg}\n')
                     f.flush()
             except:
                 pass
