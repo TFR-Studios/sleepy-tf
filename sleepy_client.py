@@ -140,9 +140,6 @@ class ActivityMonitor:
         获取当前设备状态
         返回: (is_using: bool, status_text: str)
         """
-        current_time = time.time()
-        idle_duration = current_time - self.last_activity_time
-        
         # 始终获取当前窗口标题
         status_text = "正在使用"
         if hasattr(self, 'window_monitor') and self.window_monitor:
@@ -156,10 +153,8 @@ class ActivityMonitor:
             except Exception as e:
                 logger.debug(f'获取窗口标题失败: {e}')
         
-        # 只用 idle_duration 判断 is_using，不影响 status_text
-        is_using = idle_duration <= IDLE_TIMEOUT
-        
-        return is_using, status_text
+        # 始终返回 True（不推送空闲状态）
+        return True, status_text
 
 
 class SleepyClient:

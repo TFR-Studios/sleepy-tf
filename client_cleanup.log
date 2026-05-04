@@ -12,3 +12,9 @@
 [2026-04-28 17:09:42] [CLEANUP] Global status updated to "似了" (ID=1) successfully
 [2026-04-28 20:06:31] [CLEANUP] Starting cleanup - Reason: 关闭窗口
 [2026-04-28 20:06:32] [CLEANUP] Global status updated to "似了" (ID=1) successfully
+[2026-04-28 20:24:30] [CLEANUP] Starting cleanup - Reason: 用户中断 (Ctrl+C)
+[2026-04-28 20:24:31] [CLEANUP] Global status updated to "似了" (ID=1) successfully
+[2026-04-28 20:24:33] [CLEANUP] Starting cleanup - Reason: 程序退出
+[2026-04-28 20:24:35] [CLEANUP] Global status updated to "似了" (ID=1) successfully
+[2026-05-04 13:55:38] [CLEANUP] Starting cleanup - Reason: 关闭窗口
+[2026-05-04 13:55:40] [CLEANUP] Global status updated to "似了" (ID=1) successfully
