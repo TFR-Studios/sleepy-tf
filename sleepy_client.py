@@ -416,7 +416,7 @@ class SleepyClient:
             signal.signal(signal.SIGINT, lambda s, f: (self.cleanup(f'收到信号 {f}'), sys.exit(0)))
         
         screenshot_check_counter = 0
-        screenshot_check_freq = max(1, 10 // CHECK_INTERVAL)  # 每 10 秒检查一次截图请求
+        screenshot_check_freq = max(1, 2 // CHECK_INTERVAL)  # 每 10 秒检查一次截图请求
         
         try:
             while True:
